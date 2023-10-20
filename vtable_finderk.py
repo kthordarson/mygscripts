@@ -136,7 +136,7 @@ class VTableFinder:
             print(f'[!] [garr] {e} {type(e)} when calling generate_address_range_pattern')
             return None
         try:
-            address_rexp = re.compile(address_pattern, re.DOTALL | re.MULTILINE)
+            address_rexp = re.compile(str(address_pattern), re.DOTALL | re.MULTILINE | re.UNICODE)
         except Exception as e:
             print(f'[garr] {e} {type(e)} in recompile address_pattern: {address_pattern} {type(address_pattern)}')
             return None
@@ -150,7 +150,7 @@ class VTableFinder:
         memory blocks
         """
         diff = maximum_addr - minimum_addr
-        print(f'[garp] starting min: {minimum_addr} max: {maximum_addr} diff: {diff}')
+        # print(f'[garp] starting min: {minimum_addr} max: {maximum_addr} diff: {diff}')
         val = diff
         # calculate the changed number of bytes between the minimum_addr and the maximum_addr
         byte_count = 0
@@ -160,15 +160,17 @@ class VTableFinder:
 
         # generate a sufficient wildcard character classes for all of the bytes that could fully change
         wildcard_bytes = byte_count - 1
+        # wildcard_pattern = b"[\x00-\xff]"
         wildcard_pattern = b"[\x00-\xff]"
-        print(f'[garp] wildcard_pattern: {wildcard_pattern} {type(wildcard_pattern)}')
+        # print(f'[garp] wildcard_pattern: {wildcard_pattern} {type(wildcard_pattern)}')
         boundary_byte_upper = (maximum_addr >> (wildcard_bytes*8)) & 0xff
         boundary_byte_lower = (minimum_addr >> (wildcard_bytes*8)) & 0xff
         # create a character class that will match the largest changing byte
+        # boundary_byte_pattern = b"[\\%s-\\%s]" % (bytearray([boundary_byte_lower]), bytearray([boundary_byte_upper]))
         boundary_byte_pattern = b"[\\%s-\\%s]" % (bytearray([boundary_byte_lower]), bytearray([boundary_byte_upper]))
-        print(f'[garp] boundary_byte_pattern: {boundary_byte_pattern} {type(boundary_byte_pattern)}')
+        # print(f'[garp] boundary_byte_pattern: {boundary_byte_pattern} {type(boundary_byte_pattern)}')
 
-        address_pattern = b''
+        # address_pattern = b''
         single_address_pattern = b''
         if self.little_endian is True:
             packed_addr = struct.pack(self.pack_sym, minimum_addr)
@@ -179,7 +181,8 @@ class VTableFinder:
 
         # empty_addr = struct.pack(self.pack_sym, 0)
 
-        address_pattern = b"(%s)+" % single_address_pattern
+        # address_pattern = rb"(%s)+" % single_address_pattern
+        address_pattern = b'('+single_address_pattern+b')+'
         print(f'[garp] address_pattern: {address_pattern} {type(address_pattern)}')
         return address_pattern
 
@@ -213,7 +216,7 @@ class VTableFinder:
         """
         if address_rexp is None:
             minimum_addr, maximum_addr = self.get_memory_bounds()
-            print(f'[fpr] no address_rexp  min: {minimum_addr} max: {maximum_addr} ')
+            # print(f'[fpr] no address_rexp  min: {minimum_addr} max: {maximum_addr} ')
             try:
                 address_rexp = self.generate_address_range_rexp(minimum_addr, maximum_addr)
             except Exception as e:
@@ -235,10 +238,13 @@ class VTableFinder:
             region_start = m_block.getStart()
             print(f'[fpr] m_block: {m_block} regstart: {region_start}')
             region_start_int = region_start.getOffset()
-            search_bytes = getBytes(region_start, m_block.getSize())
+            # search_bytes = getBytes(region_start, m_block.getSize())
+            search_bytes = getBytes(region_start, m_block.getSize()).toString()
             print(f'[fpr] m_block: {m_block} search_bytes: {search_bytes}')
             try:
-                iter_gen = re.finditer(address_rexp, bytes(search_bytes.toString(), 'utf8'))
+                # iter_gen = re.finditer(address_rexp, bytes(search_bytes.toString(), 'utf8'))
+                # iter_gen = address_rexp.finditer(bytes(search_bytes.toString(),'utf8'))
+                iter_gen = re.finditer(address_rexp, search_bytes)
             except TypeError as e:
                 print(f'[fpr] finditer TypeError: {e} {type(e)} address_rexp: {address_rexp} {type(address_rexp)} search_bytes: {search_bytes} {type(search_bytes)} sbtostr: {search_bytes.toString()}')
                 iter_gen = None
@@ -276,7 +282,7 @@ class VTableFinder:
         found_pointers.sort(key=lambda a: a.location)
         memory_blocks = list(getMemoryBlocks())
         points_to_memory_blocks = [b for b in memory_blocks if b.getName().startswith(".text")]
-        print(f'findvtbls found_pointers {found_pointers} memory_blocks: {memory_blocks}')
+        print(f'findvtbls found_pointers {len(found_pointers)} memory_blocks: {len(memory_blocks)}')
         # if no text section is found, fall back to a less efficient search that will search all of the initialized memory blocks
         if len(points_to_memory_blocks) == 0:
             points_to_memory_blocks = [i for i in memory_blocks if i.isInitialized()]
