@@ -2,6 +2,9 @@ from ghidra.program.model.data import StructureDataType, CategoryPath, DataTypeC
 from ghidra.program.model.data import StructureFactory
 import re
 import struct
+from collections import namedtuple, defaultdict
+FoundPointer = namedtuple("FoundPointer", ["points_to", "location"])
+
 class FoundVTable:
     def __init__(self, address, pointers=None):
         self.address = address
@@ -48,8 +51,9 @@ search_memory_blocks = [i for i in memory_blocks if i.getPermissions() == i.READ
 
 
 # test
-m_block = [k for k in getMemoryBlocks()][0]
-region_start = [k for k in getMemoryBlocks()][0].getStart()
+# m_block = [k for k in getMemoryBlocks()][0]
+m_block =  [k for k in getMemoryBlocks()][2]
+region_start = [k for k in getMemoryBlocks()][2].getStart()
 region_start_int = region_start.getOffset()
 
 search_bytes = getBytes(region_start, m_block.getSize())
@@ -57,8 +61,10 @@ search_bytes = getBytes(region_start, m_block.getSize())
 # search_bytes = [k for k in getBytes(region_start, m_block.getSize())]
 # or
 search_bytes = getBytes(region_start, m_block.getSize()).toString()
-minimum_addr = 552992768
-maximum_addr = 553136127
+#minimum_addr = 552992768
+#maximum_addr = 553136127
+minimum_addr = 0x004262a8
+maximum_addr = 0x00429548
 diff = maximum_addr - minimum_addr
 val = diff
 byte_count = 0
@@ -76,10 +82,28 @@ packed_addr = struct.pack(pack_sym, minimum_addr)
 single_address_pattern = b''.join([wildcard_pattern*wildcard_bytes, boundary_byte_pattern, packed_addr[byte_count:]])
 address_pattern = b"(%s)+" % single_address_pattern
 # = b'([\x00-\xff][\x00-\xff][\\\xf6-\\\xf8] )+'
+# address_pattern = b'([\x00-\xff][\\\xf6-\\\xf8]B\x00)+'
 address_rexp = re.compile(b'([\x00-\xff][\x00-\xff][\\\xf6-\\\xf8] )+', re.MULTILINE|re.DOTALL)
 address_rexp = re.compile("b'([\\x00-\\xff][\\x00-\\xff][\\\\@-\\\\T]\\x00)+'", re.MULTILINE|re.DOTALL)
-
+# works ... re.findall('([\x00-\xff])+', search_bytes)
+# works ... re.findall('([\x00-\xff][\x00-\xff])+', search_bytes)
+# works ... re.findall('([\x00-\xff][\x00-\xff]{10})+', search_bytes) = ['[B@54f587b4']
+# iter_gen = re.finditer('([\x00-\xff][\x00-\xff]{10})+', search_bytes)
 iter_gen = re.finditer(address_rexp, bytes(search_bytes.toString(), 'utf8'))
 iter_gen = address_rexp.finditer(bytes(search_bytes.toString(),'utf8'))
 ####
 iter_gen = re.finditer(address_rexp, bytes(search_bytes.toString(), 'utf8'))
+
+vtable_match_bytes = '[B@54f587b4'
+unpacked_addr_ints = struct.unpack_from(pack_endian + (len(vtable_match_bytes)//ptr_size)*pack_code, vtable_match_bytes)
+unpacked_addr_ints =  struct.unpack_from(pack_endian + (len(vtable_match_bytes)//ptr_size)*pack_code, bytes(vtable_match_bytes,'utf8'))
+
+addr_val = [k for k in unpacked_addr_ints][0]
+match_start = m.start()
+location_int = region_start_int + match_start + (ptr_size)
+location = addr_space.getAddress(location_int)
+FoundPointer(addr_space.getAddress(addr_val), location)
+
+found_pointers = []
+found_pointers.append(FoundPointer(addr_space.getAddress(addr_val), location))
+location_refs = getReferencesTo(found_pointer.location)
