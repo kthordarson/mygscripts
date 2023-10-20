@@ -129,14 +129,18 @@ class VTableFinder:
         self._constructor_destructor_associated_functions = []
 
     def generate_address_range_rexp(self, minimum_addr, maximum_addr):
-        print(f'min: {minimum_addr} max: {maximum_addr}')
+        print(f'[garr] min: {minimum_addr} max: {maximum_addr}')
         try:
             address_pattern = self.generate_address_range_pattern(minimum_addr, maximum_addr)
         except Exception as e:
-            print(f'[!] generate_address_range_rexp {e}')
+            print(f'[!] [garr] {e} {type(e)} when calling generate_address_range_pattern')
             return None
-        address_rexp = re.compile(str(address_pattern), re.DOTALL | re.MULTILINE)
-        print(f'generate_address_range_rexp address_pattern:  {type(address_pattern)} address_rexp: {address_rexp} {type(address_rexp)}')
+        try:
+            address_rexp = re.compile(address_pattern, re.DOTALL | re.MULTILINE)
+        except Exception as e:
+            print(f'[garr] {e} {type(e)} in recompile address_pattern: {address_pattern} {type(address_pattern)}')
+            return None
+        print(f'[garr] address_pattern:  {type(address_pattern)} address_rexp: {address_rexp} {type(address_rexp)}')
         return address_rexp
 
     def generate_address_range_pattern(self, minimum_addr, maximum_addr):
@@ -146,6 +150,7 @@ class VTableFinder:
         memory blocks
         """
         diff = maximum_addr - minimum_addr
+        print(f'[garp] starting min: {minimum_addr} max: {maximum_addr} diff: {diff}')
         val = diff
         # calculate the changed number of bytes between the minimum_addr and the maximum_addr
         byte_count = 0
@@ -156,10 +161,12 @@ class VTableFinder:
         # generate a sufficient wildcard character classes for all of the bytes that could fully change
         wildcard_bytes = byte_count - 1
         wildcard_pattern = b"[\x00-\xff]"
+        print(f'[garp] wildcard_pattern: {wildcard_pattern} {type(wildcard_pattern)}')
         boundary_byte_upper = (maximum_addr >> (wildcard_bytes*8)) & 0xff
         boundary_byte_lower = (minimum_addr >> (wildcard_bytes*8)) & 0xff
         # create a character class that will match the largest changing byte
         boundary_byte_pattern = b"[\\%s-\\%s]" % (bytearray([boundary_byte_lower]), bytearray([boundary_byte_upper]))
+        print(f'[garp] boundary_byte_pattern: {boundary_byte_pattern} {type(boundary_byte_pattern)}')
 
         address_pattern = b''
         single_address_pattern = b''
@@ -173,6 +180,7 @@ class VTableFinder:
         # empty_addr = struct.pack(self.pack_sym, 0)
 
         address_pattern = b"(%s)+" % single_address_pattern
+        print(f'[garp] address_pattern: {address_pattern} {type(address_pattern)}')
         return address_pattern
 
     def get_memory_bounds(self, excluded_memory_block_names=["tdb"]):
@@ -205,7 +213,12 @@ class VTableFinder:
         """
         if address_rexp is None:
             minimum_addr, maximum_addr = self.get_memory_bounds()
-            address_rexp = self.generate_address_range_rexp(minimum_addr, maximum_addr)
+            print(f'[fpr] no address_rexp  min: {minimum_addr} max: {maximum_addr} ')
+            try:
+                address_rexp = self.generate_address_range_rexp(minimum_addr, maximum_addr)
+            except Exception as e:
+                print(f'[!] [fpr] {e} {type(e)} in self.generate_address_range_rexp')
+                address_rexp = None
             print(f'[fpr] address_rexp: {address_rexp} {type(address_rexp)} min: {minimum_addr} max: {maximum_addr} ')
 
         found_pointers = []
@@ -225,9 +238,10 @@ class VTableFinder:
             search_bytes = getBytes(region_start, m_block.getSize())
             print(f'[fpr] m_block: {m_block} search_bytes: {search_bytes}')
             try:
-                iter_gen = re.finditer(address_rexp, search_bytes.toString())
+                iter_gen = re.finditer(address_rexp, bytes(search_bytes.toString(), 'utf8'))
             except TypeError as e:
-                print(f'[fpr] finditer TypeError: {e} {type(e)} address_rexp: {address_rexp} {type(address_rexp)} search_bytes: {search_bytes} {type(search_bytes)}')
+                print(f'[fpr] finditer TypeError: {e} {type(e)} address_rexp: {address_rexp} {type(address_rexp)} search_bytes: {search_bytes} {type(search_bytes)} sbtostr: {search_bytes.toString()}')
+                iter_gen = None
 
             match_count = 0
             print(f'[fpr] m_block: {m_block} iter_gen: {iter_gen} match_count: {match_count}')
@@ -257,7 +271,7 @@ class VTableFinder:
         return found_pointers
 
     def find_vtables(self, address_rexp=None, additional_search_block_filter=None):
-        print(f'start find_vtables {address_rexp} {additional_search_block_filter}')
+        print(f'start find_vtables arx: {address_rexp} addsbf: {additional_search_block_filter}')
         found_pointers = self.find_pointer_runs(address_rexp, additional_search_block_filter)
         found_pointers.sort(key=lambda a: a.location)
         memory_blocks = list(getMemoryBlocks())
@@ -381,40 +395,42 @@ class VTableFinder:
             # TODO: uncertain if this will create a pointer datatype at the address, but if it doesn't that needs to be done here
             createSymbol(loc, points_to_sym.name, False, False, SourceType.USER_DEFINED)
             symbols_to_delete.append((loc, points_to_sym.name))
-
-        try:
-            # this function uses the existing types of the data
-            new_struct = self.struct_fact.createStructureDataType(self.currentProgram(), found_vtable.address, vtable_byte_size, structure_name, True)
-        except Exception as exc:
-            print(f'[!] Error creating structure: {exc} {type(exc)} found_vtable.address: {found_vtable.address} vtable_byte_size: {vtable_byte_size} structure_name: {structure_name}')
-            return
-        # delete the symbols that autofilled struct field names
-        for loc, name in symbols_to_delete:
-            removeSymbol(loc, name)
-
-        # END of hacky field naming method
-        start_addr = found_vtable.address
-        end_addr = self.addr_space.getAddress(start_addr.getOffset() + (vtable_byte_size-1))
-        # saved_refs = self.find_existing_refs(start_addr, end_addr)
-        # area has to be clear to apply
-        self.listing.clearCodeUnits(start_addr, end_addr, False)
-        self.listing.createData(start_addr, new_struct, vtable_byte_size)
-
-        current_name_str = location_sym.name
-        if re.search("vb?f?table", current_name_str, re.IGNORECASE) is None:
-            location_sym.setName(newname, SourceType.USER_DEFINED)
-        """
-        for i in range(found_vtable.size):
-            datatype = PointerDataType()
+        if vtable_byte_size == 0:
+            print(f'[!] vtable_byte_size: {vtable_byte_size}')
+        if vtable_byte_size > 0:
             try:
-                new_struct.replace(i*self.ptr_size, datatype, self.ptr_size)
-            except:
-                pass
-            # new_struct.add(datatype, self.ptr_size)
-        """
-        self.dtm.addDataType(new_struct, None)
-        found_vtable.associated_struct = new_struct
-        self.update_associated_struct(found_vtable, function_definition_datatype)
+                # this function uses the existing types of the data
+                new_struct = self.struct_fact.createStructureDataType(self.currentProgram(), found_vtable.address, vtable_byte_size, structure_name, True)
+            except Exception as exc:
+                print(f'[!] Error creating structure: {exc} {type(exc)} found_vtable.address: {found_vtable.address} vtable_byte_size: {vtable_byte_size} structure_name: {structure_name}')
+                return
+            # delete the symbols that autofilled struct field names
+            for loc, name in symbols_to_delete:
+                removeSymbol(loc, name)
+
+            # END of hacky field naming method
+            start_addr = found_vtable.address
+            end_addr = self.addr_space.getAddress(start_addr.getOffset() + (vtable_byte_size-1))
+            # saved_refs = self.find_existing_refs(start_addr, end_addr)
+            # area has to be clear to apply
+            self.listing.clearCodeUnits(start_addr, end_addr, False)
+            self.listing.createData(start_addr, new_struct, vtable_byte_size)
+
+            current_name_str = location_sym.name
+            if re.search("vb?f?table", current_name_str, re.IGNORECASE) is None:
+                location_sym.setName(newname, SourceType.USER_DEFINED)
+            """
+            for i in range(found_vtable.size):
+                datatype = PointerDataType()
+                try:
+                    new_struct.replace(i*self.ptr_size, datatype, self.ptr_size)
+                except:
+                    pass
+                # new_struct.add(datatype, self.ptr_size)
+            """
+            self.dtm.addDataType(new_struct, None)
+            found_vtable.associated_struct = new_struct
+            self.update_associated_struct(found_vtable, function_definition_datatype)
 
     def apply_vtables_to_program(self, function_definition_datatype=False, address_rexp=None, require_symbol=True):
         try:
@@ -513,10 +529,8 @@ class VTableFinder:
 
         # make some mappings that will be helpful for tracing associations between vtables and functions
         for found_vtable in self.found_vtables:
-            # refs0 = list(getReferencesTo(found_vtable.address))
-            refs0 = getReferencesTo(found_vtable.address)
             refs = getReferencesTo(found_vtable.address)
-            print(f'[fvt] refs0: {refs0} {type(refs0)} refs: {refs} {type(refs)} found_vtable.address: {found_vtable.address} {type(found_vtable.address)}')
+            print(f'[fvt] refs: {refs} found_vtable: {found_vtable} {type(found_vtable)} found_vtable.address: {found_vtable.address} ')
             referring_functions = list(set([self.listing.getFunctionContaining(r.getFromAddress()) for r in refs]))
             for func in referring_functions:
                 if func is None:
@@ -741,28 +755,28 @@ manually_set_memory_bounds = False
 require_symbol_for_vtable_ident = True
 
 if __name__ == "__main__" and not isRunningHeadless():
-    find_and_apply_vtables = False
-    identify_and_create_class_structures = False
+    find_and_apply_vtables = True
+    identify_and_create_class_structures = True
     manually_set_memory_bounds = False
-    require_symbol_for_vtable_ident = True
-    choices = askChoices("Vtable Finder", "Select VTable analysis options",
-                         ["find_and_apply_vtables",
-                          "identify_and_create_class_structures",
-                          "manually_set_memory_bounds",
-                          "no_require_symbol_for_vtable_ident"],
-                         ["Find vtables and apply them to current program",
-                          "Identify and create class structures",
-                          "Manually set memory bounds for pointer search",
-                          "Don't Require pre-existing symbol for vtable ident (turn this on for non-ELF and non-PE files)"])
-    for choice in choices:
-        if choice.find("find_and_apply_vtables") != -1:
-            find_and_apply_vtables = True
-        elif choice.find("identify_and_create_class_structures") != -1:
-            identify_and_create_class_structures = True
-        elif choice.find("manually_set_memory_bounds") != -1:
-            manually_set_memory_bounds = True
-        elif choice.find("no_require_symbol_for_vtable_ident") != -1:
-            require_symbol_for_vtable_ident = False
+    require_symbol_for_vtable_ident = False
+    # choices = askChoices("Vtable Finder", "Select VTable analysis options",
+    #                      ["find_and_apply_vtables",
+    #                       "identify_and_create_class_structures",
+    #                       "manually_set_memory_bounds",
+    #                       "no_require_symbol_for_vtable_ident"],
+    #                      ["Find vtables and apply them to current program",
+    #                       "Identify and create class structures",
+    #                       "Manually set memory bounds for pointer search",
+    #                       "Don't Require pre-existing symbol for vtable ident (turn this on for non-ELF and non-PE files)"])
+    # for choice in choices:
+    #     if choice.find("find_and_apply_vtables") != -1:
+    #         find_and_apply_vtables = True
+    #     elif choice.find("identify_and_create_class_structures") != -1:
+    #         identify_and_create_class_structures = True
+    #     elif choice.find("manually_set_memory_bounds") != -1:
+    #         manually_set_memory_bounds = True
+    #     elif choice.find("no_require_symbol_for_vtable_ident") != -1:
+    #         require_symbol_for_vtable_ident = False
 
 
 
@@ -783,8 +797,7 @@ if identify_and_create_class_structures is True:
     print("\ncreating class structures")
     vtf.create_structs_for_classes()
     # and update all of the struct field names for vtables
-    vtf.apply_vtables_to_program(address_rexp=address_rexp,
-                                 require_symbol=require_symbol_for_vtable_ident)
+    vtf.apply_vtables_to_program(address_rexp=address_rexp, require_symbol=require_symbol_for_vtable_ident)
 
 print("\nvtable finder done")
 # func.signature.replaceArgument(thisptr_ind, "param_%d" % (thisptr_ind+1), UnsignedLongLongDataType(), "", SourceType.USER_DEFINED)

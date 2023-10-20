@@ -60,6 +60,8 @@ class ClassNamespaceAssociator:
         self.namespace_functions = defaultdict(set)
 
         self.class_syms = defaultdict(list)
+        self.namespace_symbol_count = 0
+        self.class_syms_count = 0
         self._populate_namespace_associated_symbols()
         self.analyze_function_associations()
 
@@ -77,9 +79,12 @@ class ClassNamespaceAssociator:
         Populate a defaultdict(list) with symbols associated
         with each Class namespace that is currently accessible
         """
+        self.namespace_symbol_count =  len([ns for ns in self.sym_tab.getClassNamespaces()])
         for namespace in self.sym_tab.getClassNamespaces():
             for s in self.sym_tab.getChildren(namespace.getSymbol()):
                 self.class_syms[s.getParentSymbol().getName()].append(s)
+        self.class_syms_count = len(self.class_syms)
+        print(f'[cnainit] nssymbcount: {self.namespace_symbol_count} classymcount: {self.class_syms_count}')
 
     def analyze_function_associations(self):
         """
@@ -89,8 +94,8 @@ class ClassNamespaceAssociator:
         """
         # clean up collected vftable entries to remove duplicates
         print(f'[afa] start')
-        for namespace in self.sym_tab.getClassNamespaces():
-            print(f'[afa] namespace: {namespace}')
+        for idx, namespace in enumerate(self.sym_tab.getClassNamespaces()):
+            print(f'[afa] namespace {idx}/{self.namespace_symbol_count}: {namespace}')
             for s in self.sym_tab.getChildren(namespace.getSymbol()):
                 usable_vtable_symbol = False
                 if s.getName().find(self._vftable_str) != -1:
@@ -136,9 +141,11 @@ class ClassNamespaceAssociator:
         """
         # do the namespace association with each func
         print(f'[sfa] starting namespace association')
-        func_count = len(self.func_associations.items())
-        for funcidx, func, namespaces in enumerate(self.func_associations.items()):
-            print(f'[sfa] {funcidx}/{func_count} func: {func}')
+        func_count = len(self.func_associations)
+        idx = 0
+        for func, namespaces in self.func_associations.items():
+            print(f'[sfa] {idx}/{func_count} func: {func}')
+            idx += 1
             if len(namespaces) == 1:
                 if not self.is_external(func):
                     self.set_parent_namespace_maybe_thunk(func, list(namespaces)[0])
@@ -157,7 +164,7 @@ class ClassNamespaceAssociator:
                 self.set_calling_convention_maybe_thunk(func, self._thiscall_str)
 
         # search for and associate private functions with each class namespace
-        nscount = len(namespace in self.namespace_functions.keys())
+        nscount = len(self.namespace_functions)
         for idx, namespace in enumerate(self.namespace_functions.keys()):
             print(f'[sfa] {idx}/{nscount} namespace: {namespace}')
             priv_funcs = self._find_private_function_of_class_namespace(namespace)
