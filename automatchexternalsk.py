@@ -23,7 +23,7 @@ from ghidra.util.exception import CancelledException
 from ghidra.util.exception import VersionException
 from loguru import logger
 
-project = state.getProject()
+project = state().getProject()
 projectData = project.getProjectData()
 rootFolder = projectData.getRootFolder()
 projdata = project.getProjectData() #ghidra.framework.main.AppInfo().getActiveProject().getProjectData()

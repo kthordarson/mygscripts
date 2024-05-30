@@ -230,7 +230,7 @@ class VTableFinder:
         found_pointers = []
         memory_blocks = list(getMemoryBlocks())
         # filter out which memory blocks should actually be searched
-        search_memory_blocks = [i for i in memory_blocks if i.getPermissions() == i.READ]
+        search_memory_blocks = [i for i in memory_blocks] # if i.getPermissions() == i.READ]
         if additional_search_block_filter is not None:
             search_memory_blocks = [i for i in search_memory_blocks if additional_search_block_filter(i) is True]
         # find and extract

@@ -7,11 +7,11 @@
 
 from ghidra.app.decompiler import DecompInterface
 from ghidra.program.model.pcode import PcodeOp, DynamicHash
-from ghidra.program.model.symbol.Equate import addReference
+#from ghidra.program.model.symbol.Equate import addReference
 import json
 
 decompiler = DecompInterface()
-decompiler.openProgram(currentProgram)
+decompiler.openProgram(currentProgram())
 
 api_dict = {}
 
@@ -60,7 +60,8 @@ def make_table():
 def load_dict():
     global api_dict
     try:
-        dataset = askFile("Choose dataset:", "Set").toString()
+        # dataset = askFile("Choose dataset:", "Set").toString()
+        dataset = '/home/kth/ghidra_scripts/winapi-ghidra/api_dict.json'
         with open(dataset, 'r') as f:
             api_dict = json.load(f)
         print("[+]Loaded File")

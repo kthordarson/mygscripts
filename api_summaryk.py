@@ -28,7 +28,9 @@ def make_table():
 def load_dict():
     global api_summary
     try:
-        dataset = askFile("Choose dataset:", "Set").toString()
+        #dataset = askFile("Choose dataset:", "Set").toString()
+        dataset = '/home/kth/ghidra_scripts/winapi-ghidra/api_summary.json'
+        # dataset = '/home/kth/ghidra_scripts/winapi-ghidra/api_dict.json'
         with open(dataset, 'r') as f:
             api_summary = json.load(f)
         print("[+]Loaded File")

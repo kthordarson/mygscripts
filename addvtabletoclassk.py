@@ -12,7 +12,7 @@ dataManager = currentProgram().getDataTypeManager()
 
 def getVtableDTs():
 	listOfVtableDT = []
-	listOfDataTypes = dataManager.getAllDataTypes()
+	listOfDataTypes = [k for k in  dataManager.getAllDataTypes()]
 	#monitor().initialize(len(listOfDataTypes))
 	for dtI in listOfDataTypes:
 		if dtI.getName().startswith('vtable'):

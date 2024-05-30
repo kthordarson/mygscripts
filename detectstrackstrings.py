@@ -91,7 +91,10 @@ def emulate():
 
     emu.hook_add(UC_HOOK_MEM_WRITE, hook_mem_write)
     # emu.hook_add(UC_HOOK_CODE, hook_code)
-    emu.emu_start(min_addr, last_instruction_addr + last_instruction.getLength())
+    try:
+        emu.emu_start(min_addr, last_instruction_addr + last_instruction.getLength())
+    except Exception as e:
+        print(f'[emu] {type(e)} {e} {min_addr=} {last_instruction_addr=}')
     n_found = 0
     for s, offset in all_strings(emu.mem_read(STACK_ADDR, STACK_SIZE), 3):
         n_found += 1
