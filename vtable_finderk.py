@@ -11,7 +11,7 @@ from ghidra.program.model.pcode import PcodeOpAST
 from ghidra.program.flatapi import FlatProgramAPI
 from ghidra.python import PythonScript
 from ghidra.app.plugin.core.navigation.locationreferences import ReferenceUtils
-from ghidra.app.plugin.core.decompile.actions import FillOutStructureCmd
+# from ghidra.app.plugin.core.decompile.actions import FillOutStructureCmd
 from ghidra.program.util import FunctionSignatureFieldLocation
 from ghidra.program.model.symbol import SourceType
 from ghidra.program.model.data import StructureDataType, PointerDataType, FunctionDefinitionDataType, UnsignedLongLongDataType

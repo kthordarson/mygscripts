@@ -15,13 +15,14 @@ from ghidra.app.decompiler import DecompileOptions
 from ghidra.app.decompiler import DecompInterface
 from ghidra.util.task import ConsoleTaskMonitor
 from ghidra.program.flatapi import FlatProgramAPI
-from ghidra.python import PythonScript
+#from ghidra.python import PythonScript
 
 # TODO: Try to autofill class structrues based on thisptr
 
 
 class ClassNamespaceAssociator:
-    def __init__(self, currentProgram):
+    def __init__(self, currentProgram, monitor):
+        self.monitor = monitor
         self.fm = currentProgram().getFunctionManager()
         self.dtm = currentProgram().getDataTypeManager()
         self.namespace_manager = currentProgram().getNamespaceManager()
@@ -289,7 +290,8 @@ class ClassNamespaceAssociator:
 # ca.set_function_associations()
 
 if __name__ == '__main__':
-    ca = ClassNamespaceAssociator(currentProgram)
+    monitor = ConsoleTaskMonitor()
+    ca = ClassNamespaceAssociator(currentProgram, monitor)
     ca.set_function_associations()
     print("Done Running!")
 

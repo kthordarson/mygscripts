@@ -21,12 +21,12 @@ from ghidra.program.database import ProgramContentHandler
 from ghidra.program.model.listing import Program
 from ghidra.util.exception import CancelledException
 from ghidra.util.exception import VersionException
+
+from ghidra.util.task import ConsoleTaskMonitor
+from  ghidra.program.util import ExternalSymbolResolver
+
 from loguru import logger
 
-project = state().getProject()
-projectData = project.getProjectData()
-rootFolder = projectData.getRootFolder()
-projdata = project.getProjectData() #ghidra.framework.main.AppInfo().getActiveProject().getProjectData()
 
 def findLibrary(name, base=None):
 	if base is None:
@@ -44,17 +44,25 @@ def findLibrary(name, base=None):
 	return None
 
 
-# exm = ghidra.framework.main.getState().currentProgram().getExternalManager()
-exm = currentProgram().getExternalManager()# .getExternalLibrary(func.getExternalLocation().getLibraryName()).getAssociatedProgramPath()
+if __name__=='__main__':
+	project = state().getProject()
+	projectData = project.getProjectData()
+	rootFolder = projectData.getRootFolder()
+	projdata = project.getProjectData() #ghidra.framework.main.AppInfo().getActiveProject().getProjectData()
 
-for lib in exm.getExternalLibraryNames():
-	logger.debug(f'[lib] {lib}')
-	if lib == '<EXTERNAL>': continue
+	# exm = ghidra.framework.main.getState().currentProgram().getExternalManager()
+	monitor = ConsoleTaskMonitor()
+	exm = currentProgram().getExternalManager()# .getExternalLibrary(func.getExternalLocation().getLibraryName()).getAssociatedProgramPath()
+	esr=ExternalSymbolResolver(projectData,monitor)
+	# ExternalSymbolResolver.getLibrarySearchList(currentProgram)
+	for lib in exm.getExternalLibraryNames():
+		logger.debug(f'[lib] {lib}')
+		if lib == '<EXTERNAL>': continue
 
-	#print(lib, '->', exm.getExternalLibraryPath(lib))
-	path = exm.getExternalLibraryPath(lib)
-	if path is None:
-		found = findLibrary(lib)
-		if found:
-			logger.info(f'Setting {lib} to {found.getPathname()}')
-			exm.setExternalPath(lib, found.getPathname(), True)
+		#print(lib, '->', exm.getExternalLibraryPath(lib))
+		path = exm.getExternalLibraryPath(lib)
+		if path is None:
+			found = findLibrary(lib)
+			if found:
+				logger.info(f'Setting {lib} to {found.getPathname()}')
+				exm.setExternalPath(lib, found.getPathname(), True)
