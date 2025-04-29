@@ -18,7 +18,7 @@ from ghidra.program.model.data import ParameterDefinitionImpl
 from ghidra.program.model.data import CategoryPath
 # from ghidra.util import NumericUtilities# import convertBytesToString
 
-dataManager = currentProgram().getDataTypeManager()
+dataManager = currentProgram.getDataTypeManager()
 
 
 
@@ -39,8 +39,8 @@ def getClassName(unparsedFnName):
 	tmpLst = unparsedFnName.split("::")
 	return tmpLst[0]
 
-functionManager = currentProgram().getFunctionManager()
-CUManager = currentProgram().getCodeManager()
+functionManager = currentProgram.getFunctionManager()
+CUManager = currentProgram.getCodeManager()
 
 
 #addr = askAddress("Location of vtable", "Input offset where class vtable begins")
@@ -49,7 +49,7 @@ doGoogle = askYesNo("Performance Option", "Would you like to try and make vtable
 doFOSS = askYesNo("Performance Option", "Would you like to try and make vtables for common open source libraries? (eg: Crypto++)")
 
 
-mem = currentProgram().getMemory()
+mem = currentProgram.getMemory()
 #print(addr)
 
 def generateVtableStruct(vtableSymbol):
@@ -147,28 +147,28 @@ def generateVtableStruct(vtableSymbol):
 #@menupath Tools.Misc.Find all VTables
 #@toolbar
 
-symbol_table = currentProgram().getSymbolTable()
+symbol_table = currentProgram.getSymbolTable()
 
 symbols = symbol_table.getSymbolIterator()
 
-monitor().initialize(symbol_table.getNumSymbols())
-monitor().setMessage("Getting all Vtables")
+# monitor.initialize(symbol_table.getNumSymbols())
+# monitor.setMessage("Getting all Vtables")
 
 allDaVtables = []
 
 for symbol in symbols:
-	monitor().checkCanceled()
+	monitor.checkCanceled()
 	if symbol.getName().startswith("__ZTV"):
 		print(symbol)
 		allDaVtables.append(symbol)
 		#generateVtableStruct(vtA)
-	monitor().incrementProgress(1)
+	monitor.incrementProgress(1)
 
-monitor().initialize(len(allDaVtables))
+monitor.initialize(len(allDaVtables))
 for s in allDaVtables:
-	monitor().checkCanceled()
+	monitor.checkCanceled()
 	generateVtableStruct(s)
-	monitor().incrementProgress(1)
+	monitor.incrementProgress(1)
 
 ###END CODE FROM NOPEY
 

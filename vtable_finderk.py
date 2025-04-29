@@ -77,18 +77,18 @@ class FoundVTable:
 class VTableFinder:
     def __init__(self, currentProgram):
         self.currentProgram = currentProgram
-        self.fm = currentProgram().getFunctionManager()
-        self.dtm = currentProgram().getDataTypeManager()
-        self.namespace_manager = currentProgram().getNamespaceManager()
-        self.addr_fact = currentProgram().getAddressFactory()
+        self.fm = currentProgram.getFunctionManager()
+        self.dtm = currentProgram.getDataTypeManager()
+        self.namespace_manager = currentProgram.getNamespaceManager()
+        self.addr_fact = currentProgram.getAddressFactory()
         self.addr_space = self.addr_fact.getDefaultAddressSpace()
-        self.mem = currentProgram().getMemory()
+        self.mem = currentProgram.getMemory()
         self.little_endian = not self.mem.isBigEndian()
-        self.sym_tab = currentProgram().getSymbolTable()
-        self._stack_reg_offset = currentProgram().getRegister("sp").getOffset()
+        self.sym_tab = currentProgram.getSymbolTable()
+        self._stack_reg_offset = currentProgram.getRegister("sp").getOffset()
         self.struct_fact = StructureFactory()
-        self.listing = currentProgram().getListing()
-        self.bm = currentProgram().getBookmarkManager()
+        self.listing = currentProgram.getListing()
+        self.bm = currentProgram.getBookmarkManager()
 
         self.ptr_size = self.addr_space.getPointerSize()
         if self.ptr_size == 4:
@@ -113,12 +113,12 @@ class VTableFinder:
         self.pack_sym = self.pack_endian + self.pack_code
 
         self._null = self.addr_space.getAddress(0)
-        self._global_ns = currentProgram().getGlobalNamespace()
+        self._global_ns = currentProgram.getGlobalNamespace()
         self._decomp_options = DecompileOptions()
         self._monitor = ConsoleTaskMonitor()
         self._ifc = DecompInterface()
         self._ifc.setOptions(self._decomp_options)
-        self.refman = currentProgram().getReferenceManager()
+        self.refman = currentProgram.getReferenceManager()
         self.found_vtables = []
         self.minimum_addr_int, self.maximum_addr_int = self.get_memory_bounds()
         self.minimum_addr_addr = toAddr(self.minimum_addr_int)
@@ -127,21 +127,21 @@ class VTableFinder:
         self.vtable_refs_from_funcs = {}
         self.created_class_structs = []
         self._constructor_destructor_associated_functions = []
-        print(f'[VTF] init minaint: {self.minimum_addr_int} minaddr: {self.minimum_addr_addr} maxint: {self.maximum_addr_int} maxaddr: {self.maximum_addr_addr}')
+        # print(f'[VTF] init minaint: {self.minimum_addr_int} minaddr: {self.minimum_addr_addr} maxint: {self.maximum_addr_int} maxaddr: {self.maximum_addr_addr}')
 
     def generate_address_range_rexp(self, minimum_addr, maximum_addr):
-        print(f'[garr] min: {minimum_addr} max: {maximum_addr}')
+        # print(f'[garr] min: {minimum_addr} max: {maximum_addr}')
         try:
             address_pattern = self.generate_address_range_pattern(minimum_addr, maximum_addr)
         except Exception as e:
-            print(f'[!] [garr] {e} {type(e)} when calling generate_address_range_pattern')
+            # print(f'[!] [garr] {e} {type(e)} when calling generate_address_range_pattern')
             return None
         try:
             address_rexp = re.compile(str(address_pattern), re.DOTALL | re.MULTILINE | re.UNICODE)
         except Exception as e:
-            print(f'[garr] {e} {type(e)} in recompile address_pattern: {address_pattern} ')
+            # print(f'[garr] {e} {type(e)} in recompile address_pattern: {address_pattern} ')
             return None
-        print(f'[garr] address_pattern: {address_pattern} address_rexp: {address_rexp} ')
+        # print(f'[garr] address_pattern: {address_pattern} address_rexp: {address_rexp} ')
         return address_rexp
 
     def generate_address_range_pattern(self, minimum_addr, maximum_addr):
@@ -184,7 +184,7 @@ class VTableFinder:
 
         # address_pattern = rb"(%s)+" % single_address_pattern
         address_pattern = b'('+single_address_pattern+b')+'
-        print(f'[garp] address_pattern: {address_pattern} ')
+        # print(f'[garp] address_pattern: {address_pattern} ')
         return address_pattern
 
     def get_memory_bounds(self, excluded_memory_block_names=["tdb"]):
@@ -208,7 +208,7 @@ class VTableFinder:
                 minimum_addr = start
             if end > maximum_addr:
                 maximum_addr = end
-        print(f'[gmb] min: {minimum_addr}  max: {maximum_addr} ')
+        # print(f'[gmb] min: {minimum_addr}  max: {maximum_addr} ')
         return minimum_addr, maximum_addr
 
 
@@ -223,7 +223,7 @@ class VTableFinder:
             try:
                 address_rexp = self.generate_address_range_rexp(minimum_addr, maximum_addr)
             except Exception as e:
-                print(f'[!] [fpr] {e} {type(e)} in self.generate_address_range_rexp')
+                # print(f'[!] [fpr] {e} {type(e)} in self.generate_address_range_rexp')
                 address_rexp = None
             # print(f'[fpr] address_rexp: {address_rexp} {type(address_rexp)} min: {minimum_addr} max: {maximum_addr} ')
 
@@ -235,7 +235,7 @@ class VTableFinder:
             search_memory_blocks = [i for i in search_memory_blocks if additional_search_block_filter(i) is True]
         # find and extract
         for m_block in search_memory_blocks:
-            print(f'[fpr] m_block: {m_block}')
+            # print(f'[fpr] m_block: {m_block}')
             if not m_block.isInitialized():
                 continue
             region_start = m_block.getStart()
@@ -251,10 +251,10 @@ class VTableFinder:
                 # iter_gen = re.finditer('([\x00-\xff][\x00-\xff]{10})+', search_bytes)
                 iter_gen = re.finditer(b'([\x00-\xff][\x00-\xff]{10})+', bytes(search_bytes, 'utf8'))
             except TypeError as e:
-                print(f'[fpr] finditer TypeError: {e} address_rexp: {address_rexp}  search_bytes: {search_bytes} sbtostr: {search_bytes}')
+                # print(f'[fpr] finditer TypeError: {e} address_rexp: {address_rexp}  search_bytes: {search_bytes} sbtostr: {search_bytes}')
                 iter_gen = None
             except Exception as e:
-                print(f'[fpr] finditer Exception: {e} {type(e)} address_rexp: {address_rexp}  search_bytes: {search_bytes} sbtostr: {search_bytes}')
+                # print(f'[fpr] finditer Exception: {e} {type(e)} address_rexp: {address_rexp}  search_bytes: {search_bytes} sbtostr: {search_bytes}')
                 iter_gen = None
 
             match_count = 0
@@ -268,15 +268,15 @@ class VTableFinder:
                     #print(f'[!] [fpr] StopIteration {e} match_count: {match_count}')
                     break
                 except RuntimeError as e:
-                    print(f'[!] [fpr] RuntimeError {e} match_count: {match_count}')
+                    # print(f'[!] [fpr] RuntimeError {e} match_count: {match_count}')
                     # this means that recursion went too deep
                     # print("match hit recursion limit on match %d" % match_count)
                     break
                 except TypeError as e:
-                    print(f'[!] [fpr] TypeError {e} match_count: {match_count}')
+                    # print(f'[!] [fpr] TypeError {e} match_count: {match_count}')
                     break
                 except Exception as e:
-                    print(f'[!] [fpr] Exception {e} {type(e)} match_count: {match_count}')
+                    # print(f'[!] [fpr] Exception {e} {type(e)} match_count: {match_count}')
                     break
                 if m:
                     match_count += 1
@@ -289,21 +289,21 @@ class VTableFinder:
                         location = self.addr_space.getAddress(location_int)
                         new_found_ptr = FoundPointer(self.addr_space.getAddress(addr_val), location)
                         found_pointers.append(new_found_ptr)
-                        print(f'[fpr] {i} newptr: {new_found_ptr} addrval: {addr_val} locint: {location_int} loc: {location} total: {len(found_pointers)} ')
-        print(f'[fpr] found_pointers: {len(found_pointers)} ')
+                        # print(f'[fpr] {i} newptr: {new_found_ptr} addrval: {addr_val} locint: {location_int} loc: {location} total: {len(found_pointers)} ')
+        # print(f'[fpr] found_pointers: {len(found_pointers)} ')
         return found_pointers
 
     def find_vtables(self, address_rexp=None, additional_search_block_filter=None):
-        print(f'[fvt] start arx: {address_rexp} addsbf: {additional_search_block_filter}')
+        # print(f'[fvt] start arx: {address_rexp} addsbf: {additional_search_block_filter}')
         try:
             found_pointers = self.find_pointer_runs(address_rexp, additional_search_block_filter)
         except Exception as e:
-            print(f'[!] [fvt] {e} {type(e)} in self.find_pointer_runs')
+            # print(f'[!] [fvt] {e} {type(e)} in self.find_pointer_runs')
             found_pointers = []
         found_pointers.sort(key=lambda a: a.location)
         memory_blocks = list(getMemoryBlocks())
         points_to_memory_blocks = [b for b in memory_blocks if b.getName().startswith(".text")]
-        print(f'[fvt] found_pointers {len(found_pointers)} memory_blocks: {len(memory_blocks)}')
+        # print(f'[fvt] found_pointers {len(found_pointers)} memory_blocks: {len(memory_blocks)}')
         # if no text section is found, fall back to a less efficient search that will search all of the initialized memory blocks
         if len(points_to_memory_blocks) == 0:
             points_to_memory_blocks = [i for i in memory_blocks if i.isInitialized()]
@@ -396,9 +396,9 @@ class VTableFinder:
         exist update it to use the current names of the functions
         """
         location_sym = getSymbolAt(found_vtable.address)
-        print(f'[corusffv] location_sym: {location_sym} fvta: {found_vtable}')
+        # print(f'[corusffv] location_sym: {location_sym} fvta: {found_vtable}')
         if require_symbol is True and location_sym is None:
-            print(f'[corusffv] [!] no location_sym: {location_sym} fvta: {found_vtable}')
+            # print(f'[corusffv] [!] no location_sym: {location_sym} fvta: {found_vtable}')
             return None
         structure_name = "%s_%s" % (newname, str(found_vtable.address))
         # TODO: NULL fields in the middle of vtables cause this calculation to be too low
@@ -424,14 +424,12 @@ class VTableFinder:
             # TODO: uncertain if this will create a pointer datatype at the address, but if it doesn't that needs to be done here
             createSymbol(loc, points_to_sym.name, False, False, SourceType.USER_DEFINED)
             symbols_to_delete.append((loc, points_to_sym.name))
-        if vtable_byte_size == 0:
-            print(f'[!] vtable_byte_size: {vtable_byte_size}')
         if vtable_byte_size > 0:
             try:
                 # this function uses the existing types of the data
                 new_struct = self.struct_fact.createStructureDataType(self.currentProgram(), found_vtable.address, vtable_byte_size, structure_name, True)
             except Exception as exc:
-                print(f'[!] Error creating structure: {exc} {type(exc)} found_vtable.address: {found_vtable.address} vtable_byte_size: {vtable_byte_size} structure_name: {structure_name}')
+                # print(f'[!] Error creating structure: {exc} {type(exc)} found_vtable.address: {found_vtable.address} vtable_byte_size: {vtable_byte_size} structure_name: {structure_name}')
                 return
             # delete the symbols that autofilled struct field names
             for loc, name in symbols_to_delete:
@@ -467,16 +465,16 @@ class VTableFinder:
         try:
             found_vtables = self.find_vtables(address_rexp=address_rexp)
         except Exception as e:
-            print(f'[!] Error finding vtables: {e} {type(e)} address_rexp: {address_rexp} ')
+            # print(f'[!] Error finding vtables: {e} {type(e)} address_rexp: {address_rexp} ')
             found_vtables = []
         for found_vtable in found_vtables:
             location_sym = getSymbolAt(found_vtable.address)
-            print(f'[avtp] found_vtable: {found_vtable} location_sym: {location_sym}')
+            # print(f'[avtp] found_vtable: {found_vtable} location_sym: {location_sym}')
             if require_symbol is True and location_sym is None:
                 continue
 
             self.bm.setBookmark(found_vtable.address, "Analysis", "Found VTable", "Vtable found at %s" % found_vtable.address)
-            print(f'[avtpp] found_vtable: {found_vtable} ')
+            # print(f'[avtpp] found_vtable: {found_vtable} ')
             self.create_or_update_struct_from_found_vtable(found_vtable, function_definition_datatype=function_definition_datatype, require_symbol=require_symbol)
 
     def update_associated_struct(self, found_vtable, function_defininition_datatype=False):
@@ -562,7 +560,7 @@ class VTableFinder:
         # make some mappings that will be helpful for tracing associations between vtables and functions
         for found_vtable in self.found_vtables:
             refs = getReferencesTo(found_vtable.address)
-            print(f'[fvt] refs: {refs} found_vtable: {found_vtable}  found_vtable.address: {found_vtable.address} ')
+            # print(f'[fvt] refs: {refs} found_vtable: {found_vtable}  found_vtable.address: {found_vtable.address} ')
             referring_functions = list(set([self.listing.getFunctionContaining(r.getFromAddress()) for r in refs]))
             for func in referring_functions:
                 if func is None:
@@ -581,7 +579,7 @@ class VTableFinder:
         structures if they do not already exist or auto fill them out if they do
         """
         self.find_vtable_references()
-        print(f"[csfc] done getting references self.found_vtables: {self.found_vtables}")
+        # print(f"[csfc] done getting references self.found_vtables: {self.found_vtables}")
         # vtables that are only used by one or two functions are typically either abstract or impl vtables for that class or vtables
         # for embedded classes. tne one or two functions that reference them are typically either constructors or destructors. Identifying
         # and labeling these functions and automatically creating the class structures for them cleans up the vast majority of the
@@ -592,9 +590,9 @@ class VTableFinder:
         # will be needed, and that a `struct vtable**` was identified as the type by ghidra (because vtables are most commonly the first field)
         # in a class.
         all_vtable_structs = [i.associated_struct for i in self.found_vtables]
-        print(f"[csfc] Identifying constructors and destructors all_vtable_structs: {all_vtable_structs}")
+        # print(f"[csfc] Identifying constructors and destructors all_vtable_structs: {all_vtable_structs}")
         for found_vtable, functions in self.vtable_refs_from_funcs.items():
-            print(f'[csfc] found_vtable: {found_vtable} functions: {functions} ')
+            # print(f'[csfc] found_vtable: {found_vtable} functions: {functions} ')
             # TODO: Maybe use pcode to identify which functions are constructor/destructor.
             # limiting this to vtables that only have a destructor and constructor for now
             # TODO: Since Identifying Constructors/Destructors based off of how many functions touch the vtable seems to work pretty well for
