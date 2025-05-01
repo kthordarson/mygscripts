@@ -40,12 +40,14 @@ for s in st.getSymbols(n):
 		isFastcall, isStdcall = False, False
 		realName, bytesInParams = None, 0
 		f = None
-		m = re.match('^@(\w+)@([0-9]+)$', name)
+		# m = re.match('^@(\w+)@([0-9]+)$', name)
+		m = re.match(r'^@(\w+)@([0-9]+)$', name)
 		if m is not None:
 			isFastcall = True
 			realName, bytesInParams = m.groups()
 		else:
-			m = re.match('^_(\w+)@([0-9]+)$', name)
+			# m = re.match('^_(\w+)@([0-9]+)$', name)
+			m = re.match(r'^_(\w+)@([0-9]+)$', name)
 			if m is not None:
 				isStdcall = True
 				realName, bytesInParams = m.groups()
