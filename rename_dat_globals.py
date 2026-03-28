@@ -1,7 +1,7 @@
 
-#@category mygscripts
-#@author kth
-#@description Rename DAT_* globals using access pattern heuristics
+# @category mygscripts
+# @author kth
+# @description Rename DAT_* globals using access pattern heuristics
 
 from ghidra.program.model.symbol import SymbolType, SourceType
 from ghidra.program.model.data import (

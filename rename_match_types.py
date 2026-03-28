@@ -1,5 +1,5 @@
-#@author kth
-#@category mygscripts
+# @author kth
+# @category mygscripts
 import re
 
 def find_calling_functions(function_code, target_function="SendMessageA"):

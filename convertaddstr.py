@@ -1,3 +1,5 @@
+# @author kth
+# @category mygscripts
 # Ghidra script: Convert all ASCII regions to strings automatically
 # This will scan the entire memory and convert any printable sequences into strings.
 

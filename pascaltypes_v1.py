@@ -1,5 +1,5 @@
-#@author kth
-#@category mygscripts
+# @author kth
+# @category mygscripts
 # Ghidra script to improve Free Pascal decompilation
 # Scans for Pascal-style symbols, renames functions, and reconstructs data types
 

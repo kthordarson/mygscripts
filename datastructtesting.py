@@ -1,5 +1,5 @@
-#@author kth
-#@category mygscripts
+# @author kth
+# @category mygscripts
 from ghidra.program.model.data import StructureDataType, CategoryPath, DataTypeConflictHandler, PointerDataType, BuiltInDataTypeManager, ArrayDataType
 from ghidra.program.model.data import StructureFactory
 import re

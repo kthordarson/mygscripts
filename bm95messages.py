@@ -1,3 +1,5 @@
+# @author kth
+# @category mygscripts
 from ghidra.app.script import GhidraScript
 from ghidra.program.model.util import CodeUnitIterator
 from ghidra.program.model.symbol import SourceType

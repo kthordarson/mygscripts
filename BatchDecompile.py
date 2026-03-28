@@ -1,3 +1,5 @@
+# @author kth
+# @category mygscripts
 # BatchDecompile.py
 # Decompile all functions in the current program and save them to a directory.
 

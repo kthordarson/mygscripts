@@ -1,8 +1,8 @@
-#@author kth
-#@category mygscripts
-#@keybinding 
-#@menupath 
-#@toolbar 
+# @author kth
+# @category mygscripts
+# @keybinding 
+# @menupath 
+# @toolbar 
 
 from ghidra.program.model.symbol import SourceType
 from ghidra.app.decompiler import DecompInterface

@@ -1,3 +1,5 @@
+# @author kth
+# @category mygscripts
 import ghidra.app.script.GhidraScript
 import ghidra.program.model.symbol.SourceType
 

@@ -1,6 +1,6 @@
 # Change namespace of selected regions
-#@author kth
-#@category mygscripts
+# @author kth
+# @category mygscripts
 import ghidra
 from ghidra.program.flatapi import FlatProgramAPI
 from ghidra.python import PythonScript

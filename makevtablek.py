@@ -1,10 +1,10 @@
 # from https://github.com/openfortress/GhidraVtableStructGenerator/
 #Automatically make a vtable struct for a class
-#@author kth
-#@category mygscripts
-#@keybinding
-#@menupath Tools.Misc.Make Vtable Struct
-#@toolbar
+# @author kth
+# @category mygscripts
+# @keybinding
+# @menupath Tools.Misc.Make Vtable Struct
+# @toolbar
 
 #from binascii import hexlify
 from ghidra.program.model.data import DataTypeConflictHandler
@@ -141,11 +141,11 @@ def generateVtableStruct(vtableSymbol):
 
 ##CODE FROM NOPEY
 #Finds all VTables, prints them out in the console
-#@author kth
-#@category mygscripts
-#@keybinding
-#@menupath Tools.Misc.Find all VTables
-#@toolbar
+# @author kth
+# @category mygscripts
+# @keybinding
+# @menupath Tools.Misc.Find all VTables
+# @toolbar
 
 symbol_table = currentProgram.getSymbolTable()
 

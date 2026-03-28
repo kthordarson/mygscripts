@@ -1,6 +1,6 @@
 # Automatically search for vtables in a less than sane way
-#@author kth
-#@category mygscripts
+# @author kth
+# @category mygscripts
 
 
 import ghidra

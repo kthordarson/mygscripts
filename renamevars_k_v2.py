@@ -1,5 +1,5 @@
-#@author kth
-#@category mygscripts
+# @author kth
+# @category mygscripts
 # @category CustomerSubmission.Search
 # Script requests current variable name and desired new name.
 # It then iterates through all functions, renaming the variable.

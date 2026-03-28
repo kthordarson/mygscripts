@@ -1,10 +1,10 @@
 # from https://github.com/openfortress/GhidraVtableStructGenerator/
 #Automatically make a vtable struct for a class
-#@author kth
-#@category mygscripts
-#@keybinding
-#@menupath Tools.Misc.Make Single Vtable Struct
-#@toolbar
+# @author kth
+# @category mygscripts
+# @keybinding
+# @menupath Tools.Misc.Make Single Vtable Struct
+# @toolbar
 
 #from binascii import hexlify
 from ghidra.program.model.data import DataTypeConflictHandler

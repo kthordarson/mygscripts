@@ -2,8 +2,8 @@
 #The equation is set automatically.
 #However, only four APIs are supported: SHGetSpecialFolderPathA, RegCreateKeyExA, RegSetValueExA, and CreateProcessA.
 #This is a prototype. I plan to develop it.
-#@author kth
-#@category mygscripts
+# @author kth
+# @category mygscripts
 
 from ghidra.app.decompiler import DecompInterface
 from ghidra.program.model.pcode import PcodeOp, DynamicHash

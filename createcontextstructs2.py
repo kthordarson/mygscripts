@@ -1,3 +1,5 @@
+# @author kth
+# @category mygscripts
 from ghidra.program.model.data import StructureDataType, UnsignedIntegerDataType, UnsignedCharDataType, ArrayDataType, PointerDataType, VoidDataType
 from ghidra.program.model.symbol import SourceType
 from ghidra.util.task import TaskMonitor

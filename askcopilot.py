@@ -1,3 +1,5 @@
+# @author kth
+# @category mygscripts
 # GptHidra with GitHub Copilot CLI support
 # Author: Modified for Kristjan Thordarson
 

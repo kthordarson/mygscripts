@@ -1,4 +1,5 @@
-#@category mygscripts
+# @author kth
+# @category mygscripts
 # Finds all functions that call FUN_00419110
 
 from ghidra.program.model.symbol import RefType

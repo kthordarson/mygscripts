@@ -1,8 +1,6 @@
+# @author kth
+# @category mygscripts
 # Who reference this function( (target_function_name)
-#
-# @category xref.Demo
-#
-
 # Import libraries from Ghidra that will be available to use.
 from ghidra.util.task import ConsoleTaskMonitor
 from ghidra.program.model.symbol import RefType

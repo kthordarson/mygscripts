@@ -4,11 +4,11 @@
 #
 # After running this script you will probably want to use FixupELFExternalSymbolsScript.java too.
 #
-#@author kth
-#@category mygscripts
-#@keybinding F11
-#@menupath
-#@toolbar
+# @author kth
+# @category mygscripts
+# @keybinding F11
+# @menupath
+# @toolbar
 import ghidra.framework.main
 from ghidra.app.util import NamespaceUtils
 from ghidra.program.model.data import Array, CategoryPath, PointerDataType, StructureDataType, DataTypeConflictHandler

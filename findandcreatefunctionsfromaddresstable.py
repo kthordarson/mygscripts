@@ -1,3 +1,5 @@
+# @author kth
+# @category mygscripts
 # Import necessary Ghidra classes
 from ghidra.program.model.address import AddressSet
 from ghidra.util.task import ConsoleTaskMonitor

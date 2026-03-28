@@ -1,3 +1,5 @@
+# @author kth
+# @category mygscripts
 from ghidra.program.model.symbol import SourceType
 from ghidra.program.model.listing import Function
 from ghidra.program.model.address import AddressFactory

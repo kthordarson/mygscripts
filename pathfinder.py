@@ -1,6 +1,6 @@
 # Search for call paths between two functions in the current program.
-#@author kth
-#@category mygscripts
+# @author kth
+# @category mygscripts
 
 from ghidra.app.util.bin import ByteProvider, RandomAccessByteProvider, BinaryReader
 from ghidra.program.model.symbol import RefType

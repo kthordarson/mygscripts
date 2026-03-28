@@ -1,10 +1,10 @@
 # from https://github.com/openfortress/GhidraVtableStructGenerator/
 #Print the methods in a class to a file
-#@author kth
-#@category mygscripts
-#@keybinding
-#@menupath Tools.Misc.Print class methods into file.
-#@toolbar
+# @author kth
+# @category mygscripts
+# @keybinding
+# @menupath Tools.Misc.Print class methods into file.
+# @toolbar
 from ghidra.program.model.data import StructureDataType
 from ghidra.program.model.data import PointerDataType
 

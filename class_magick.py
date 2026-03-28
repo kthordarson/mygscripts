@@ -1,9 +1,9 @@
 #Generate class structures based on vftable data
-#@author kth
-#@category mygscripts
-#@keybinding
-#@menupath
-#@toolbar
+# @author kth
+# @category mygscripts
+# @keybinding
+# @menupath
+# @toolbar
 
 from ghidra.app.util import NamespaceUtils
 from ghidra.program.model.data import Array, CategoryPath, PointerDataType, StructureDataType, DataTypeConflictHandler

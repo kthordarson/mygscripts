@@ -1,9 +1,9 @@
-#@author kth
-#@category mygscripts
-#@keybinding 
-#@menupath 
-#@toolbar 
-#@runtime PyGhidra
+# @author kth
+# @category mygscripts
+# @keybinding 
+# @menupath 
+# @toolbar 
+# @runtime PyGhidra
 
 
 #TODO Add User Code Here

@@ -1,3 +1,5 @@
+# @author kth
+# @category mygscripts
 import ghidra
 from ghidra.program.model.symbol import SourceType
 from ghidra.program.model.data import StructureDataType, PointerDataType

@@ -1,6 +1,6 @@
-#@category mygscripts
-#@author kth
-#@description Smart rename DAT_* globals using access + function context
+# @category mygscripts
+# @author kth
+# @description Smart rename DAT_* globals using access + function context
 
 from ghidra.program.model.symbol import SymbolType, SourceType
 from ghidra.program.model.data import (

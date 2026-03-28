@@ -1,3 +1,5 @@
+# @author kth
+# @category mygscripts
 import http.server
 import threading
 import requests

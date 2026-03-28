@@ -1,3 +1,5 @@
+# @author kth
+# @category mygscripts
 RENAME_CONFIG = [
     {
         'function_address': 0x1000dbcc,

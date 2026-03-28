@@ -1,7 +1,7 @@
 # Detect stack-strings written by the selected instructions, emulated using Unicorn.
 # The script is written in Python 3, so it needs Ghidrathon.
-# @author zxgio
-# @category Emulation
+# @author kth
+# @category mygscripts
 # @keybinding
 # @menupath
 # @toolbar

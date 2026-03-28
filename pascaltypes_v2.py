@@ -1,5 +1,5 @@
-#@author kth
-#@category mygscripts
+# @author kth
+# @category mygscripts
 from ghidra.program.model.symbol import SymbolType
 from ghidra.program.model.data import StructureDataType, PointerDataType, CategoryPath
 from ghidra.program.model.listing import CodeUnit

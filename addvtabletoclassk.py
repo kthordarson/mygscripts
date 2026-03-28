@@ -1,10 +1,10 @@
 # from https://github.com/openfortress/GhidraVtableStructGenerator/
 #Automatically attach a vtable struct to a class
-#@author kth
-#@category mygscripts
-#@keybinding
-#@menupath Tools.Misc.Attach Vtable Struct to class struct
-#@toolbar
+# @author kth
+# @category mygscripts
+# @keybinding
+# @menupath Tools.Misc.Attach Vtable Struct to class struct
+# @toolbar
 from ghidra.program.model.data import StructureDataType
 from ghidra.program.model.data import PointerDataType
 

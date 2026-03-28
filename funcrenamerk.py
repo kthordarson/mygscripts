@@ -1,9 +1,9 @@
 #funcrenamer
-#@author kth
-#@category mygscripts
-#@keybinding
-#@menupath Tools.funcren.funcren
-#@toolbar
+# @author kth
+# @category mygscripts
+# @keybinding
+# @menupath Tools.funcren.funcren
+# @toolbar
 from loguru import logger
 import re
 from ghidra.app.decompiler import DecompileOptions

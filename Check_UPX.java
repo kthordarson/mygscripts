@@ -1,9 +1,9 @@
-/*@author @dll_cool_j
+/*@author kth
  *@reference https://www.archcloudlabs.com/projects/ghidra_scripting_01/
  */
 
 // Search for UPX or ELF related byte values.
-// @category Analysis
+// @category mygscripts
 
 import ghidra.app.script.GhidraScript;
 import ghidra.program.model.address.Address;

@@ -1,3 +1,5 @@
+# @author kth
+# @category mygscripts
 # Save as export_symbols.py in Ghidra's script directory
 from ghidra.program.model.symbol import SymbolType
 output_file = "/home/kth/Games/atomiciso/bm95exesymbols.r2"

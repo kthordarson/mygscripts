@@ -1,6 +1,6 @@
 
 // ApplyMethodListSig.java
-// @category Analysis
+// @category mygscripts
 
 import ghidra.app.cmd.function.ApplyFunctionSignatureCmd;
 import ghidra.app.script.GhidraScript;

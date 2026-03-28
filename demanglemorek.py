@@ -1,5 +1,5 @@
-#@author kth
-#@category mygscripts
+# @author kth
+# @category mygscripts
 # Attempts to more aggressively demangle any Microsoft-style mangled symbols.
 # DemanglerCmd is not used as it will filter by program format (e.g. Microsoft
 # Demangler will not be used if the executable format is not PE/COFF). Instead,

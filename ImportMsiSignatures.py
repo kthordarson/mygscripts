@@ -1,3 +1,5 @@
+# @author kth
+# @category mygscripts
 from ghidra.program.model.data import FunctionDefinitionDataType, ParameterDefinitionImpl
 from ghidra.program.model.symbol import SourceType, SymbolType
 from ghidra.program.model.data import PointerDataType, UnicodeDataType, VoidDataType, UnsignedIntegerDataType

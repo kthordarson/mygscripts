@@ -1,8 +1,8 @@
-#@author kth
-#@category mygscripts
-#@keybinding
-#@menupath Tools.AutoFix.Level
-#@toolbar
+# @author kth
+# @category mygscripts
+# @keybinding
+# @menupath Tools.AutoFix.Level
+# @toolbar
 
 from ghidra.program.model.symbol import SourceType
 from ghidra.program.model.data import *

@@ -7,8 +7,8 @@
 # The script is also a work in progress, so there will likely be improvements
 # made, especially when it comes to inheritance structures, call graph
 # analysis, and association of functions with a given class namespace.
-#@author kth
-#@category mygscripts
+# @author kth
+# @category mygscripts
 
 from collections import defaultdict
 from ghidra.app.decompiler import DecompileOptions

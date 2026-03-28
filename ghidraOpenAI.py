@@ -1,3 +1,5 @@
+# @author kth
+# @category mygscripts
 from openai import OpenAI
 client = OpenAI()
 code_snippet = """
