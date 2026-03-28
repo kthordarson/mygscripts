@@ -1,5 +1,5 @@
-#@author 
-#@category Refactoring
+#@author kth
+#@category mygscripts
 #@keybinding 
 #@menupath 
 #@toolbar 

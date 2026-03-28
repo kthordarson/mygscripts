@@ -1,7 +1,7 @@
 # from https://github.com/Bigdrea6/winapi-ghidra
 #Embed the API summary in comments. The overview is in line with MSDN.
-#@author Bigdrea6
-#@category Windows Analysis
+#@author kth
+#@category mygscripts
 
 import json
 

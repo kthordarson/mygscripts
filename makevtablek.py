@@ -1,7 +1,7 @@
 # from https://github.com/openfortress/GhidraVtableStructGenerator/
 #Automatically make a vtable struct for a class
-#@author Fenteale
-#@category vtable
+#@author kth
+#@category mygscripts
 #@keybinding
 #@menupath Tools.Misc.Make Vtable Struct
 #@toolbar
@@ -141,8 +141,8 @@ def generateVtableStruct(vtableSymbol):
 
 ##CODE FROM NOPEY
 #Finds all VTables, prints them out in the console
-#@author Magnus "Nopey" Larsen
-#@category
+#@author kth
+#@category mygscripts
 #@keybinding
 #@menupath Tools.Misc.Find all VTables
 #@toolbar

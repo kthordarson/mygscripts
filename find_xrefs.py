@@ -27,7 +27,7 @@ def find_callers(function, visited, path, all_paths):
         all_paths.append(list(path))  # Add a copy of the current path
 
 # target_function_name = "main"
-target_function_name = "FUN_014a6bb0"
+target_function_name = "sockbindsendrecvFUN_004d4dc0"
         
 print("~~~~~~~~~~~~~~~~Start of script~~~~~~~~~~~~~~~~")
 program = getCurrentProgram()

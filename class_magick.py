@@ -1,6 +1,6 @@
 #Generate class structures based on vftable data
-#@author buherator
-#@category _NEW_
+#@author kth
+#@category mygscripts
 #@keybinding
 #@menupath
 #@toolbar
@@ -38,13 +38,13 @@ def createClassType(namespace, vftableDataType):
 		return dtm.addDataType(structDataType, DataTypeConflictHandler.REPLACE_HANDLER)
 
 if __name__ == '__main__':
-	currAddr = currentLocation().getAddress()
+	currAddr = currentLocation.getAddress()
 	originalData = getDataAt(currAddr)
 	if originalData:
 		try:
 			originalDataType=originalData.getDataType()
 		except AttributeError as e:
-			print(f'[classmagic] err {e} ')
+			print('[classmagic] err ' + str(e))
 			exit()
 	if not originalData:
 		print("[!] originalData not found! currAddr "+str(currAddr))
@@ -66,23 +66,23 @@ if __name__ == '__main__':
 	newVftableDataType = None
 	newClassDataType = None
 	if originalDataType:
-		print(f'originalDataType: {originalDataType} type: {type(originalDataType)} class_namespace: {class_namespace} {type(class_namespace)}')
+		print('originalDataType: ' + str(originalDataType) + ' type: ' + str(type(originalDataType)) + ' class_namespace: ' + str(class_namespace) + ' ' + str(type(class_namespace)))
 		try:
 			class_namespace = NamespaceUtils.convertNamespaceToClass(class_namespace)
 		except Exception as e:
-			print(f'[!] convertNamespaceToC {e} {type(e)} ')
+			print('[!] convertNamespaceToC ' + str(e) + ' ' + str(type(e)))
 		try:
 			newVftableDataType = createVftableType(class_namespace, originalDataType.getNumComponents())
 		except AttributeError as e:
-			print(f'[!] {e} currAddr: {currAddr} ')
+			print('[!] ' + str(e) + ' currAddr: ' + str(currAddr))
 	if newVftableDataType:
-		print(f'currAddr: {currAddr} class_namespace: {class_namespace} newVftableDataType: {newVftableDataType}')
+		print('currAddr: ' + str(currAddr) + ' class_namespace: ' + str(class_namespace) + ' newVftableDataType: ' + str(newVftableDataType))
 		removeDataAt(currAddr)
 		createData(currAddr, newVftableDataType)
 		try:
 			newClassDataType=createClassType(class_namespace, newVftableDataType)
 		except TypeError as e:
-			print(f'[E] TypeError {e} class_namespace={class_namespace} currAddr: {currAddr}')
+			print('[E] TypeError ' + str(e) + ' class_namespace=' + str(class_namespace) + ' currAddr: ' + str(currAddr))
 			exit()
 		for i in range(0,originalDataType.getNumComponents()*currentProgram().getDefaultPointerSize(), currentProgram().getDefaultPointerSize()):
 			funcAddr=None

@@ -1,3 +1,5 @@
+#@author kth
+#@category mygscripts
 from ghidra.program.model.data import DataType, DataTypeManager
 from ghidra.program.model.data import PointerDataType
 from ghidra.program.model.listing import FunctionManager, ParameterImpl, VariableStorage

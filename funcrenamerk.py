@@ -1,6 +1,6 @@
 #funcrenamer
 #@author kth
-#@category Functions
+#@category mygscripts
 #@keybinding
 #@menupath Tools.funcren.funcren
 #@toolbar

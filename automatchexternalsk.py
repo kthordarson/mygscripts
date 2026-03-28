@@ -4,8 +4,8 @@
 #
 # After running this script you will probably want to use FixupELFExternalSymbolsScript.java too.
 #
-#@author infowski
-#@category Symbol
+#@author kth
+#@category mygscripts
 #@keybinding F11
 #@menupath
 #@toolbar
@@ -45,14 +45,14 @@ def findLibrary(name, base=None):
 
 
 if __name__=='__main__':
-	project = state().getProject()
+	project = state.getProject()
 	projectData = project.getProjectData()
 	rootFolder = projectData.getRootFolder()
 	projdata = project.getProjectData() #ghidra.framework.main.AppInfo().getActiveProject().getProjectData()
 
 	# exm = ghidra.framework.main.getState().currentProgram().getExternalManager()
 	monitor = ConsoleTaskMonitor()
-	exm = currentProgram().getExternalManager()# .getExternalLibrary(func.getExternalLocation().getLibraryName()).getAssociatedProgramPath()
+	exm = currentProgram.getExternalManager()# .getExternalLibrary(func.getExternalLocation().getLibraryName()).getAssociatedProgramPath()
 	esr=ExternalSymbolResolver(projectData,monitor)
 	# ExternalSymbolResolver.getLibrarySearchList(currentProgram)
 	for lib in exm.getExternalLibraryNames():

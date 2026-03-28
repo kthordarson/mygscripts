@@ -1,7 +1,7 @@
 # from https://github.com/Bigdrea6/winapi-ghidra
 #Create a table of Windows APIs and the addresses to CALL them.
-#@author Bigdrea6
-#@category Windows Analysis
+#@author kth
+#@category mygscripts
 
 from collections import Counter
 

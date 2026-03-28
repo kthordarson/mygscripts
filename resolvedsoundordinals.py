@@ -1,3 +1,5 @@
+#@author kth
+#@category mygscripts
 from ghidra.program.model.symbol import SymbolTable, Symbol, SourceType, SymbolType
 from ghidra.util.task import TaskMonitor
 from ghidra.program.model.listing import FunctionManager

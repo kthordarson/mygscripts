@@ -1,4 +1,6 @@
 # Iterate over import symbols and apply signatures
+#@author kth
+#@category mygscripts
 
 import ghidra.app.script
 from ghidra.program.model.symbol import Symbol

@@ -1,7 +1,7 @@
 # from https://github.com/openfortress/GhidraVtableStructGenerator/
 #Print the methods in a class to a file
-#@author Fenteale
-#@category vtable
+#@author kth
+#@category mygscripts
 #@keybinding
 #@menupath Tools.Misc.Print class methods into file.
 #@toolbar

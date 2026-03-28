@@ -1,3 +1,5 @@
+#@author kth
+#@category mygscripts
 from ghidra.program.model.symbol import SourceType
 import re
 # rust-objdump.exe -d C:\temp\keystrike\keystrike-ssh-terminator --demangle > keysrtrikesshterminatordump.txt

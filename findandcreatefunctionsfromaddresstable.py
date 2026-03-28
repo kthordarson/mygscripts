@@ -44,7 +44,7 @@ def find_address_tables():
                         try:
                             value_int = int(value)                    
                         except TypeError as e:
-                            print("Error converting value to int at %s: %s %s" % (code_unit.getAddress(), str(e), type(e)))
+                            # print("Error converting value to int at %s: %s %s" % (code_unit.getAddress(), str(e), type(e)))
                             continue
                     if value_int:
                         # Add this address to our address table

@@ -1,7 +1,7 @@
 # from https://github.com/openfortress/GhidraVtableStructGenerator/
 #Automatically make a vtable struct for a class
-#@author Fenteale
-#@category vtable
+#@author kth
+#@category mygscripts
 #@keybinding
 #@menupath Tools.Misc.Make Single Vtable Struct
 #@toolbar

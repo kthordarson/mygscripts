@@ -1,6 +1,6 @@
 # Change namespace of selected regions
-#@author Clifton Wolfe
-#@category C++
+#@author kth
+#@category mygscripts
 import ghidra
 from ghidra.program.flatapi import FlatProgramAPI
 from ghidra.python import PythonScript

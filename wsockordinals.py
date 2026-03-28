@@ -1,3 +1,5 @@
+#@author kth
+#@category mygscripts
 
 ordinals = {
 	'imp_ordinal_1' : 'imp_accept',

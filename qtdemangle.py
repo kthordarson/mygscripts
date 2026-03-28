@@ -1,3 +1,5 @@
+#@author kth
+#@category mygscripts
 # Ghidra Python script to demangle Microsoft C++ symbols (including Qt and RTTI)
 from ghidra.app.decompiler import DecompInterface
 from ghidra.util.task import TaskMonitor
@@ -7,7 +9,7 @@ from ghidra.app.util.demangler import DemanglerUtil
 def demangle_symbols():
     # Get the current program
     program = currentProgram
-    symbol_table = program.getSymbolTable()
+    symbol_table = program().getSymbolTable()
     
     # Counter for processed symbols
     count = 0

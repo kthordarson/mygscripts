@@ -1,5 +1,5 @@
 #@author kth
-#@category C++
+#@category mygscripts
 
 from ghidra.app.decompiler import DecompileOptions
 from ghidra.app.decompiler import DecompInterface

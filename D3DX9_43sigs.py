@@ -1,4 +1,6 @@
 # Ghidra Python script to apply D3DX9_43.dll function and data type signatures
+#@author kth
+#@category mygscripts
 from ghidra.program.model.data import StructureDataType, FloatDataType, PointerDataType, ArrayDataType
 from ghidra.program.model.data import FunctionDefinitionDataType, ParameterDefinitionImpl
 from ghidra.program.model.data import IntegerDataType, UnsignedIntegerDataType, CharDataType

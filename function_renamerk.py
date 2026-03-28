@@ -12,8 +12,8 @@
 # be utilized for a single type E.g. a pointer on the stack that is used for a `char *`
 # should not ever be used to hold a `uint` unless there is a union containing the two types.
 # Keeping that in mind, the script can and will rename things incorrectly
-#@author Clifton Wolfe
-#@category C++
+#@author kth
+#@category mygscripts
 
 
 from ghidra.app.decompiler import DecompileOptions

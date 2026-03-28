@@ -2,8 +2,8 @@
 # Idempotent script to try to find the base and regions
 # of firmware images
 #
-#@author Clifton Wolfe
-#@category C++
+#@author kth
+#@category mygscripts
 
 from collections import defaultdict
 from ghidra.app.decompiler import DecompileOptions

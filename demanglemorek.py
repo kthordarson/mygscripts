@@ -1,22 +1,22 @@
+#@author kth
+#@category mygscripts
 # Attempts to more aggressively demangle any Microsoft-style mangled symbols.
 # DemanglerCmd is not used as it will filter by program format (e.g. Microsoft
 # Demangler will not be used if the executable format is not PE/COFF). Instead,
 # this script invokes the MicrosoftDemangler directly on any symbol prefixed by
 # `?`. Additionally, this script handles `@name@X` (fastcall) and `_name@X`
 # (stdcall) mangles.
-# @author: Matt Borgerson
-# @category: Symbol
-# from loguru import logger
 from ghidra.app.util.demangler import DemanglerOptions
 from ghidra.app.util.demangler.microsoft import MicrosoftDemangler
 from ghidra.program.model.symbol import SourceType
 import re
 
-st = currentProgram().getSymbolTable()
-n = currentProgram().getNamespaceManager().getGlobalNamespace()
+st = currentProgram.getSymbolTable()
+n = currentProgram.getNamespaceManager().getGlobalNamespace()
 
 numDemangled = 0
 failures = []
+demangled = []
 # logger.info('[dmore] ')
 for s in st.getSymbols(n):
 	name = s.getName()
@@ -40,12 +40,12 @@ for s in st.getSymbols(n):
 		isFastcall, isStdcall = False, False
 		realName, bytesInParams = None, 0
 		f = None
-		m = re.match('^@(\w+)@([0-9]+)$', name)
+		m = re.match(r'^@(\w+)@([0-9]+)$', name)
 		if m is not None:
 			isFastcall = True
 			realName, bytesInParams = m.groups()
 		else:
-			m = re.match('^_(\w+)@([0-9]+)$', name)
+			m = re.match(r'^_(\w+)@([0-9]+)$', name)
 			if m is not None:
 				isStdcall = True
 				realName, bytesInParams = m.groups()
@@ -71,12 +71,19 @@ for s in st.getSymbols(n):
 					convention = '__fastcall' if isFastcall else '__stdcall'
 					f.setCallingConvention(convention)
 					numDemangled += 1
+					demangled.append({'realname':realName, 'func':f})
 	else:
 		continue
 	# numDemangled += 1
 
-# logger.debug(f'[dmore] Done names {numDemangled} Failed to demangle {len(failures)}')
+# print(f'[dmore] demangled: {len(demangled)} Done names {numDemangled} Failed to demangle {len(failures)}')
 if len(failures) > 0:
+	# print(f'[dmore] Done names {numDemangled} Failed to demangle {len(failures)}')
 	for n in sorted(failures):
 		print('[fail] ', n)
 		# logger.debug(f'[fail] {n}')
+if len(demangled) > 0:
+	for d in demangled:
+		print('[dmore] demangled ', d['realname'], d['func'])
+		# print(f'[dmore] demangled  {d["realname"]} {d["func"]}')
+		# logger.debug(f'[dmore] {d["realname"]} {d["func"]}')

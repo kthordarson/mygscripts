@@ -1,6 +1,6 @@
 # Automatically search for vtables in a less than sane way
-#@author Clifton Wolfe
-#@category C++
+#@author kth
+#@category mygscripts
 
 
 import ghidra

@@ -1,7 +1,7 @@
 # from https://github.com/openfortress/GhidraVtableStructGenerator/
 #Automatically attach a vtable struct to a class
-#@author Fenteale
-#@category vtable
+#@author kth
+#@category mygscripts
 #@keybinding
 #@menupath Tools.Misc.Attach Vtable Struct to class struct
 #@toolbar
