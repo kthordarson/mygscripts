@@ -4,14 +4,17 @@
 # @menupath
 # @toolbar
 
+try:
+    from ghidra.ghidra_builtins import currentProgram
+except ImportError:
+    pass
 from ghidra.program.model.symbol import SourceType
 from ghidra.program.model.data import (
     PointerDataType, UnsignedLongDataType, UnsignedIntegerDataType,
     UnsignedCharDataType, CharDataType, VoidDataType, IntegerDataType,
     StructureDataType
 )
-from ghidra.program.model.listing import ParameterImpl, ReturnParameterImpl
-from ghidra.program.model.listing.Function import FunctionUpdateType
+from ghidra.program.model.listing import Function, ParameterImpl, ReturnParameterImpl
 from java.util import ArrayList
 
 fm = currentProgram.getFunctionManager()
@@ -202,7 +205,7 @@ for addr, info in FUNCTIONS.items():
         params.add(ParameterImpl(pname, ptype, currentProgram))
 
     # Update function signature (callingConvention, return, params, updateType, force, sourceType)
-    func.updateFunction(None, ret_param, params, FunctionUpdateType.DYNAMIC_STORAGE_FORMAL_PARAMS, True, SourceType.USER_DEFINED)
+    func.updateFunction(None, ret_param, params, Function.FunctionUpdateType.DYNAMIC_STORAGE_FORMAL_PARAMS, True, SourceType.USER_DEFINED)
 
     print("[+] Updated:", info["name"])
 

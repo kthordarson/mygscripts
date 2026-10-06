@@ -1,4 +1,3 @@
-# from https://github.com/flounderK/ghidra_scripts
 # Auto-rename functions across a file based on the string passed to a specific function.
 # It should be noted that the script only works for functions whose names start with `FUN_`,
 # to avoid overwriting user-named functions.
@@ -15,21 +14,13 @@
 # @author kth
 # @category mygscripts
 
+
 try:
     from ghidra.ghidra_builtins import (
-        createFunction,
-        currentProgram,
         getBytes,
-        getDataContaining,
-        getFunctionAt,
-        getFunctionContaining,
-        getSymbolAt,
-        state,
-        toAddr,
     )
 except ImportError:
     pass
-
 from ghidra.app.decompiler import DecompileOptions
 from ghidra.app.decompiler import DecompInterface
 from ghidra.util.task import ConsoleTaskMonitor
@@ -57,17 +48,17 @@ def get_location(func):
 
 
 class FunctionRenamer:
-    def __init__(self):
-        self.fm = currentProgram().getFunctionManager()
-        self.dtm = currentProgram().getDataTypeManager()
-        self.namespace_manager = currentProgram().getNamespaceManager()
-        self.addr_fact = currentProgram().getAddressFactory()
+    def __init__(self, currentProgram):
+        self.fm = currentProgram.getFunctionManager()
+        self.dtm = currentProgram.getDataTypeManager()
+        self.namespace_manager = currentProgram.getNamespaceManager()
+        self.addr_fact = currentProgram.getAddressFactory()
         self.addr_space = self.addr_fact.getDefaultAddressSpace()
-        self.mem = currentProgram().getMemory()
-        self.sym_tab = currentProgram().getSymbolTable()
+        self.mem = currentProgram.getMemory()
+        self.sym_tab = currentProgram.getSymbolTable()
         # NOTE: A better way to find this register needs to be found
         # if it is even still needed
-        # self._stack_reg_offset = currentProgram().getRegister("sp").getOffset()
+        # self._stack_reg_offset = currentProgram.getRegister("sp").getOffset()
 
         self.ptr_size = self.addr_space.getPointerSize()
         if self.ptr_size == 4:
@@ -76,12 +67,12 @@ class FunctionRenamer:
             self._get_ptr_size = self.mem.getLong
 
         self._null = self.addr_space.getAddress(0)
-        self._global_ns = currentProgram().getGlobalNamespace()
+        self._global_ns = currentProgram.getGlobalNamespace()
         self._decomp_options = DecompileOptions()
         self._monitor = ConsoleTaskMonitor()
         self._ifc = DecompInterface()
         self._ifc.setOptions(self._decomp_options)
-        self.refman = currentProgram().getReferenceManager()
+        self.refman = currentProgram.getReferenceManager()
 
     def get_high_function(self, func, timeout=60):
         """

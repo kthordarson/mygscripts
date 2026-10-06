@@ -1,5 +1,21 @@
 # @author kth
 # @category mygscripts
+try:
+    from ghidra.ghidra_builtins import (
+        askAddress,
+        createSymbol,
+        currentProgram,
+        getBytes,
+        getDataAt,
+        getMemoryBlocks,
+        getReferencesTo,
+        getSymbolAt,
+        isRunningHeadless,
+        removeSymbol,
+        toAddr,
+    )
+except ImportError:
+    pass
 from ghidra.program.model.data import FunctionDefinitionDataType, ParameterDefinitionImpl
 from ghidra.program.model.symbol import SourceType, SymbolType
 from ghidra.program.model.data import PointerDataType, UnicodeDataType, VoidDataType, UnsignedIntegerDataType
@@ -9,7 +25,7 @@ def create_msi_signatures():
     # Get program components
     dtm = currentProgram.getDataTypeManager()
     fm = currentProgram.getFunctionManager()
-    
+
     # Common MSI function signatures
     msi_functions = [
         {
@@ -92,13 +108,13 @@ def create_msi_signatures():
             try:
                 # Get the thunk address (where the import is actually referenced)
                 thunk_addr = func.getEntryPoint()
-                
+
                 # Get or create the thunk function at this address
                 thunk_func = fm.getFunctionAt(thunk_addr)
                 if thunk_func is None:
                     thunk_func = fm.createFunction(func_name, thunk_addr, None, SourceType.IMPORTED)
                     print("Created thunk function: " + func_name + " at " + str(thunk_addr))
-                
+
                 if thunk_func is not None:
                     # Apply the signature
                     thunk_func.setSignature(func_defs[func_name], SourceType.IMPORTED)

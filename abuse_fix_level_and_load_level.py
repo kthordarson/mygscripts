@@ -4,10 +4,38 @@
 # @menupath Tools.AutoFix.Level
 # @toolbar
 
+try:
+	from ghidra.ghidra_builtins import (
+		askChoices,
+		askDirectory,
+		askFile,
+		currentProgram,
+		getFunctionContaining,
+		getReferencesTo,
+		getSymbol,
+		setBackgroundColor,
+		toAddr,
+		getBytes,
+		addr_space,
+		addr_fact
+	)
+except ImportError:
+	pass
 from ghidra.program.model.symbol import SourceType
-from ghidra.program.model.data import *
+# from ghidra.program.model.data import *
 from ghidra.program.model.listing import Function
 from ghidra.util.task import ConsoleTaskMonitor
+from ghidra.program.model.data import (
+	StructureDataType,
+	PointerDataType,
+	FunctionDefinitionDataType,
+	UnsignedLongLongDataType,
+	DWordDataType,
+	ByteDataType,
+	WordDataType,
+	QWordDataType,
+	DataTypeConflictHandler,
+)
 
 monitor = ConsoleTaskMonitor()
 

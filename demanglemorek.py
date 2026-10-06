@@ -6,8 +6,21 @@
 # this script invokes the MicrosoftDemangler directly on any symbol prefixed by
 # `?`. Additionally, this script handles `@name@X` (fastcall) and `_name@X`
 # (stdcall) mangles.
+try:
+	from ghidra.ghidra_builtins import (
+		createTableChooserDialog,
+		currentProgram,
+		getFunctionContaining,
+		getMemoryBlocks,
+		state,
+		toAddr,
+		monitor,getFunctionAt,
+		createFunction,findBytes
+	)
+except ImportError:
+	pass
 from ghidra.app.util.demangler import DemanglerOptions
-from ghidra.app.util.demangler.microsoft import MicrosoftDemangler
+from ghidra.app.util.demangler.microsoft import MicrosoftDemangler  # type: ignore
 from ghidra.program.model.symbol import SourceType
 import re
 

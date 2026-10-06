@@ -1,4 +1,3 @@
-# from https://github.com/flounderK/ghidra_scripts
 # Idempotent script to try to find the base and regions
 # of firmware images
 #
@@ -21,12 +20,12 @@ import sys
 
 class DisassemblyHelper:
     def __init__(self, currentProgram):
-        self.fm = currentProgram().getFunctionManager()
-        self.dtm = currentProgram().getDataTypeManager()
-        self.addr_fact = currentProgram().getAddressFactory()
+        self.fm = currentProgram.getFunctionManager()
+        self.dtm = currentProgram.getDataTypeManager()
+        self.addr_fact = currentProgram.getAddressFactory()
         self.default_addr_space = self.addr_fact.getDefaultAddressSpace()
-        self.mem = currentProgram().getMemory()
-        self.sym_tab = currentProgram().getSymbolTable()
+        self.mem = currentProgram.getMemory()
+        self.sym_tab = currentProgram.getSymbolTable()
 
         self.ptr_size = self.default_addr_space.getPointerSize()
         if self.ptr_size == 4:
@@ -109,7 +108,7 @@ class MemoryRegionFinder:
         defined memory space
         https://gist.github.com/starfleetcadet75/cdc512db77d7f1fb7ef4611c2eda69a5
         """
-        listing = self.currentProgram().getListing()
+        listing = self.currentProgram.getListing()
         mem = self.dh.mem
         monitor = self.dh._monitor
         invalid_accesses = set()

@@ -1,0 +1,63 @@
+#!/bin/bash
+
+CAN_PROCEED=1
+CREATED_TMP_DIR=0
+if [[ -n "${OUTPUT_DIR}" ]]; then
+    TMP_DIR="${OUTPUT_DIR}"
+    mkdir -p "$TMP_DIR"
+else
+    TMP_DIR=$(mktemp -d)
+    CREATED_TMP_DIR=1
+fi
+
+# for debugging
+# mkdir -p "$TMP_DIR"
+
+if [[ -n "${AFL_PATH}" ]]; then
+    AFL_QEMU_TRACE="${AFL_PATH}/afl-qemu-trace"
+elif [[ -n "$(command -v afl-qemu-trace)" ]]; then
+    AFL_QEMU_TRACE=$(command -v afl-qemu-trace)
+else
+    echo "ERR: AFL_PATH must be specified or afl-qemu-trace must be in PATH"
+    CAN_PROCEED=0
+fi
+
+
+if [[ -z "${AFL_OUTPUT_DIR}" ]]; then
+    echo "ERR: AFL_OUTPUT_DIR must be set"
+    # maybe use AFL_CUSTOM_INFO_OUT
+    CAN_PROCEED=0
+fi
+
+if [[ $# -lt 1 ]]; then
+    echo "$0"
+    echo "Usage: AFL_OUTPUT_DIR=<afl-output-dir> $0 <command args>"
+    echo ""
+    echo "      AFL_OUTPUT_DIR: output directory from afl++"
+    echo "      AFL_PATH: path to built afl++ project. not necessary if afl++ has been installed"
+    echo "      OUTPUT_DIR: path to output traces in"
+    echo ""
+    echo "Example:"
+    echo "      AFL_OUTPUT_DIR=/mnt/ramdisk/output/ OUTPUT_DIR=./output $0 ./fuzz_qemu"
+    CAN_PROCEED=0
+fi
+
+# only exit after all of the other warnings and errors have been printed
+# so that the user doesn't have to waste time
+if [[ $CAN_PROCEED -eq 0 ]]; then
+    # only clean up a directory this script created, never the user's OUTPUT_DIR
+    if [[ $CREATED_TMP_DIR -eq 1 ]]; then
+        rm -rf "$TMP_DIR"
+    fi
+    exit 1
+fi
+
+# every file under any `queue` directory (one per afl++ instance with -M/-S)
+find "$AFL_OUTPUT_DIR" -type f -path '*/queue/*' -print0 |
+    while IFS= read -r -d '' i; do
+        TMP_FILE=$(mktemp -p "$TMP_DIR")
+        echo "$AFL_QEMU_TRACE -d in_asm -D $TMP_FILE $* < $i"
+        "$AFL_QEMU_TRACE" -d in_asm -D "$TMP_FILE" "$@" < "$i"
+    done
+
+echo "$TMP_DIR"

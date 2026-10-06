@@ -1,9 +1,18 @@
 # Change namespace of selected regions
 # @author kth
 # @category mygscripts
+try:
+    from ghidra.ghidra_builtins import (
+        askString,
+        currentProgram,
+        currentSelection,
+        getBytes,
+        getFunctionAt,
+        toAddr,
+    )
+except ImportError:
+    pass
 import ghidra
-from ghidra.program.flatapi import FlatProgramAPI
-# from ghidra.python import PythonScript
 from ghidra.program.model.symbol import SourceType
 import string
 import re
@@ -14,10 +23,10 @@ import struct
 
 class PointerUtils:
     def __init__(self):
-        self.addr_fact = currentProgram().getAddressFactory()
+        self.addr_fact = currentProgram.getAddressFactory()
         self.addr_space = self.addr_fact.getDefaultAddressSpace()
         self.ptr_size = self.addr_space.getPointerSize()
-        self.mem = currentProgram().getMemory()
+        self.mem = currentProgram.getMemory()
         self.ptr_pack_sym = ""
         if self.ptr_size == 4:
             self.ptr_pack_sym = "I"
@@ -40,8 +49,8 @@ class PointerUtils:
 
 def get_or_create_namespace(name, parent=None):
     if parent is None:
-        parent = currentProgram().getGlobalNamespace()
-    sym_tab = currentProgram().getSymbolTable()
+        parent = currentProgram.getGlobalNamespace()
+    sym_tab = currentProgram.getSymbolTable()
     maybe_ns = sym_tab.getNamespace(name, parent)
     if maybe_ns:
         return maybe_ns

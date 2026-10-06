@@ -1,4 +1,3 @@
-# from https://github.com/flounderK/ghidra_scripts
 # Namespace Association and class analysis to improve C++ analysis from
 # RecoverClassesFromRTTIScript.java and astrelsky/Ghidra-Cpp-Class-Analyzer.
 # The script currently requires one of those to have already been performed,
@@ -10,26 +9,31 @@
 # @author kth
 # @category mygscripts
 
+try:
+    from ghidra.ghidra_builtins import (
+        currentProgram,
+    )
+except ImportError:
+    pass
 from collections import defaultdict
 from ghidra.app.decompiler import DecompileOptions
 from ghidra.app.decompiler import DecompInterface
 from ghidra.util.task import ConsoleTaskMonitor
 from ghidra.program.flatapi import FlatProgramAPI
-## from ghidra.python import PythonScript
+# from ghidra.python import PythonScript
 
 # TODO: Try to autofill class structrues based on thisptr
 
 
 class ClassNamespaceAssociator:
-    def __init__(self, currentProgram, monitor):
-        self.monitor = monitor
-        self.fm = currentProgram().getFunctionManager()
-        self.dtm = currentProgram().getDataTypeManager()
-        self.namespace_manager = currentProgram().getNamespaceManager()
-        self.addr_fact = currentProgram().getAddressFactory()
+    def __init__(self, currentProgram):
+        self.fm = currentProgram.getFunctionManager()
+        self.dtm = currentProgram.getDataTypeManager()
+        self.namespace_manager = currentProgram.getNamespaceManager()
+        self.addr_fact = currentProgram.getAddressFactory()
         self.addr_space = self.addr_fact.getDefaultAddressSpace()
-        self.mem = currentProgram().getMemory()
-        self.sym_tab = currentProgram().getSymbolTable()
+        self.mem = currentProgram.getMemory()
+        self.sym_tab = currentProgram.getSymbolTable()
 
         self.ptr_size = self.addr_space.getPointerSize()
         if self.ptr_size == 4:
@@ -38,7 +42,7 @@ class ClassNamespaceAssociator:
             self._get_ptr_size = self.mem.getLong
 
         self._null = self.addr_space.getAddress(0)
-        self._global_ns = currentProgram().getGlobalNamespace()
+        self._global_ns = currentProgram.getGlobalNamespace()
 
         self._thiscall_str = u'__thiscall'
         self._vftable_str = u'vftable'
@@ -61,8 +65,6 @@ class ClassNamespaceAssociator:
         self.namespace_functions = defaultdict(set)
 
         self.class_syms = defaultdict(list)
-        self.namespace_symbol_count = 0
-        self.class_syms_count = 0
         self._populate_namespace_associated_symbols()
         self.analyze_function_associations()
 
@@ -80,12 +82,9 @@ class ClassNamespaceAssociator:
         Populate a defaultdict(list) with symbols associated
         with each Class namespace that is currently accessible
         """
-        self.namespace_symbol_count =  len([ns for ns in self.sym_tab.getClassNamespaces()])
         for namespace in self.sym_tab.getClassNamespaces():
             for s in self.sym_tab.getChildren(namespace.getSymbol()):
                 self.class_syms[s.getParentSymbol().getName()].append(s)
-        self.class_syms_count = len(self.class_syms)
-        print(f'[cnainit] nssymbcount: {self.namespace_symbol_count} classymcount: {self.class_syms_count}')
 
     def analyze_function_associations(self):
         """
@@ -94,15 +93,13 @@ class ClassNamespaceAssociator:
         class namespace each function can be associated with.
         """
         # clean up collected vftable entries to remove duplicates
-        print(f'[afa] start')
-        for idx, namespace in enumerate(self.sym_tab.getClassNamespaces()):
-            print(f'[afa] namespace {idx}/{self.namespace_symbol_count}: {namespace}')
+        for namespace in self.sym_tab.getClassNamespaces():
             for s in self.sym_tab.getChildren(namespace.getSymbol()):
                 usable_vtable_symbol = False
-                if s.getName().find(self._vftable_str) != -1:
+                if s.name.find(self._vftable_str) != -1:
                     usable_vtable_symbol = True
 
-                if s.getName().find(self._vtable_str) != -1:
+                if s.name.find(self._vtable_str) != -1:
                     usable_vtable_symbol = True
 
                 if not usable_vtable_symbol:
@@ -141,12 +138,7 @@ class ClassNamespaceAssociator:
         unless disabled.
         """
         # do the namespace association with each func
-        print(f'[sfa] starting namespace association')
-        func_count = len(self.func_associations)
-        idx = 0
         for func, namespaces in self.func_associations.items():
-            print(f'[sfa] {idx}/{func_count} func: {func}')
-            idx += 1
             if len(namespaces) == 1:
                 if not self.is_external(func):
                     self.set_parent_namespace_maybe_thunk(func, list(namespaces)[0])
@@ -165,13 +157,12 @@ class ClassNamespaceAssociator:
                 self.set_calling_convention_maybe_thunk(func, self._thiscall_str)
 
         # search for and associate private functions with each class namespace
-        nscount = len(self.namespace_functions)
-        for idx, namespace in enumerate(self.namespace_functions.keys()):
-            print(f'[sfa] {idx}/{nscount} namespace: {namespace}')
+        for namespace in self.namespace_functions.keys():
             priv_funcs = self._find_private_function_of_class_namespace(namespace)
             for func in priv_funcs:
                 if not self.is_external(func):
                     self.set_parent_namespace_maybe_thunk(func, namespace)
+
                 if not skip_thiscall_association:
                     self.set_calling_convention_maybe_thunk(func, self._thiscall_str)
 
@@ -179,23 +170,23 @@ class ClassNamespaceAssociator:
         if func == self._null:
             return False
         dethunked = func
-        if func.isThunk():
+        if func.thunk:
             dethunked = func.getThunkedFunction(True)
 
-        return dethunked.isExternal()
+        return dethunked.external
 
     def set_calling_convention_maybe_thunk(self, func, calling_convention):
-        while func.isThunk():
+        while func.thunk:
             func.setCallingConvention(calling_convention)
             func = func.getThunkedFunction(False)
         func.setCallingConvention(calling_convention)
 
     def set_parent_namespace_maybe_thunk(self, func, namespace):
-        while func.isThunk():
+        while func.thunk:
             func.setParentNamespace(namespace)
             func = func.getThunkedFunction(False)
 
-        if not func.isExternal():  # cant reparent external function
+        if not func.external:  # cant reparent external function
             func.setParentNamespace(namespace)
 
     def get_vftable_entries(self, vftable):
@@ -205,16 +196,12 @@ class ClassNamespaceAssociator:
         as the vtable likely includes an uninitialized function poiner.
         """
         vftable_addr = vftable.getAddress()
-        if vftable.getName().find(self._vtable_str) != -1:
+        if vftable.name.find(self._vtable_str) != -1:
             vftable_addr = vftable_addr.add(self.ptr_size*2)
         addr = vftable_addr
         funcs = []
         while True:
-            try:
-                maybe_func_addr_val = self._get_ptr_size(addr)
-            except Exception as e:
-                print(f'[!] {e} {type(e)} addr: {addr}')
-                break
+            maybe_func_addr_val = self._get_ptr_size(addr)
             maybe_func_addr = self.addr_space.getAddress(maybe_func_addr_val)
             func = self.fm.getFunctionAt(maybe_func_addr)
             # if the ptr is a null ptr (uninitialized) or points
@@ -252,7 +239,7 @@ class ClassNamespaceAssociator:
             if func == self._null:
                 continue
 
-            if func.getName().find(self._pure_virtual_str) != -1:
+            if func.name.find(self._pure_virtual_str) != -1:
                 return True
 
         return False
@@ -290,13 +277,12 @@ class ClassNamespaceAssociator:
 # ca.set_function_associations()
 
 if __name__ == '__main__':
-    monitor = ConsoleTaskMonitor()
-    ca = ClassNamespaceAssociator(currentProgram, monitor)
+    ca = ClassNamespaceAssociator(currentProgram)
     ca.set_function_associations()
     print("Done Running!")
 
 # funcs = ca.get_vftable_entries(cm.class_syms[u'ActiveLoggerImpl'][2])
 # func = funcs[0]
 # datatype = ca.get_datatype_of_thisptr(func)
-# base_datatype_name = datatype.displaygetName().replace(' *', '')
+# base_datatype_name = datatype.displayName.replace(' *', '')
 # [b] = [i for i in ca.dtm.getAllStructures() if i.getName() == base_datatype_name]
