@@ -18,7 +18,7 @@ try:
 except ImportError:
     pass
 
-from ghidra.app.decompiler import DecompInterface
+from ghidra.app.decompiler import DecompileOptions
 from ghidra.app.decompiler.util import FillOutStructureHelper
 from ghidra.program.model.data import Structure, CategoryPath
 
@@ -27,9 +27,13 @@ cat = dtm.getCategory(CategoryPath("/Demangler"))
 symtab = currentProgram.getSymbolTable()
 fm = currentProgram.getFunctionManager()
 
-ifc = DecompInterface()
-ifc.openProgram(currentProgram)
 helper = FillOutStructureHelper(currentProgram, monitor)
+# a bare DecompInterface() has no options, and processStructure reads
+# getOptions().getDefaultTimeout() when it follows calls -> NPE.
+# setUpDecompiler opens the program with the options the helper expects.
+options = DecompileOptions()
+options.grabFromProgram(currentProgram)
+ifc = helper.setUpDecompiler(options)
 
 
 def walk(c):
@@ -60,6 +64,18 @@ for st in walk(cat):
                 f"Failed to decompile function at address {sym.getAddress()}. {st.getName()}"
             )
             continue
-        this_var = hf.getLocalSymbolMap().getParamSymbol(0).getHighVariable()
-        helper.processStructure(this_var, f, False, False, ifc)  # False = fill existing
+        this_sym = hf.getLocalSymbolMap().getParamSymbol(0)
+        if this_sym is None:
+            print(f"No decompiled first parameter for {f.getName()}. {st.getName()}")
+            continue
+        # False = fill existing
+        filled = helper.processStructure(
+            this_sym.getHighVariable(), f, False, False, ifc
+        )
+        # processStructure only returns the result; copy it into the
+        # placeholder so it is actually saved
+        if filled is not None and not filled.isZeroLength() and filled != st:
+            st.replaceWith(filled)
     print("%s -> %d bytes" % (st.getPathName(), st.getLength()))
+
+ifc.dispose()
