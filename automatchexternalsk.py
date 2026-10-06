@@ -57,12 +57,16 @@ if __name__=='__main__':
 	# ExternalSymbolResolver.getLibrarySearchList(currentProgram)
 	for lib in exm.getExternalLibraryNames():
 		logger.debug(f'[lib] {lib}')
-		if lib == '<EXTERNAL>': continue
-
-		#print(lib, '->', exm.getExternalLibraryPath(lib))
+		if lib == '<EXTERNAL>':
+			continue
+		# print(lib, '->', exm.getExternalLibraryPath(lib))
 		path = exm.getExternalLibraryPath(lib)
 		if path is None:
 			found = findLibrary(lib)
 			if found:
 				logger.info(f'Setting {lib} to {found.getPathname()}')
 				exm.setExternalPath(lib, found.getPathname(), True)
+			else:
+				logger.warning(f'Could not find library {lib}')
+		else:
+			logger.info(f'{lib} already has path {path}')

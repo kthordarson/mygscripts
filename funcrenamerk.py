@@ -30,12 +30,15 @@ def get_func_parameters(func):
 	# dbgFunc = [f for f in currentProgram().getListing().getFunctions(True) if 'tcdbg_printf' in f.getName()][0]
 
 def get_funclist(prefix='FUN_'):
-	sm = currentProgram().getSymbolTable()
+	sm = currentProgram.getSymbolTable()
 	symb = sm.getExternalSymbols()
-	symbols=[k.getName() for k in symb]
+	symbols = [k.getName() for k in symb]
 	INTERESTING_FUNCS.extend(symbols)
-	funcList = [f for f in currentProgram().getListing().getFunctions(True) if prefix in f.getName()]
+	funcList = [f for f in currentProgram.getListing().getFunctions(True) if prefix in f.getName()]
 	monitor = ConsoleTaskMonitor()
+	nodes = [{'func':k, 'callers':k.getCallingFunctions(monitor), 'calls': k.getCalledFunctions(monitor)} for k in funcList]
+	_ = [print(f'name: {k['func'].getName()} xrefs: {len(k['callers'])}') for k in nodes if len(k['callers'])>3]
+	_ = [print(f'name: {k['func'].getName()} xrefs: {len(k['calls'])}') for k in nodes if len(k['calls'])>3]
 	result = []
 	print(f'funclist={len(funcList)} symbols={len(symbols)} IF={len(INTERESTING_FUNCS)}' )
 	for idx,func in enumerate(funcList):
