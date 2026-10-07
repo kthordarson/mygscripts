@@ -1,8 +1,8 @@
 # Find MIPS ROP gadgets that perform two controllable jumps.
-# original author: fuzzywalls
+
 # @author kth
 # @category mygscripts
-#@menupath TNS.Mips Rops.Gadgets.Double Jumps
+# @menupath kthtools.Mips Rops.Gadgets.Double Jumps
 
 
 try:

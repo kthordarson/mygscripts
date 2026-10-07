@@ -1,8 +1,8 @@
 # Find MIPS ROP gadgets near the beginning of functions that allow for stack pointer movement.
-# original author: fuzzywalls
+
 # @author kth
 # @category mygscripts
-#@menupath TNS.Mips Rops.Gadgets.Prologue
+# @menupath kthtools.Mips Rops.Gadgets.Prologue
 
 
 try:

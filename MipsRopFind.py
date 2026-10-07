@@ -1,8 +1,8 @@
 # Find MIPS ROP gadgets that contain a user specified instruction.
-# original author: fuzzywalls
+
 # @author kth
 # @category mygscripts
-#@menupath TNS.Mips Rops.Gadgets.Find
+# @menupath kthtools.Mips Rops.Gadgets.Find
 
 
 try:

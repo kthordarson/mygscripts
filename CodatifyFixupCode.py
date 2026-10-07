@@ -1,8 +1,8 @@
 # Fixup .text section by defining all undefined code and converting it to a function if applicable.
-# original author: fuzzywalls
+
 # @author kth
 # @category mygscripts
-#@menupath TNS.Codatify.Fixup Code
+# @menupath kthtools.Codatify.Fixup Code
 
 try:
     from ghidra.ghidra_builtins import (
@@ -33,7 +33,7 @@ FUNCTION_PREFIX = 'CFUN_%s'
 
 def find_code():
     """
-    Find executable code sections and return an address set representing the 
+    Find executable code sections and return an address set representing the
     range.
     """
     code_sections = []
@@ -53,11 +53,11 @@ def is_aligned_instruction_address(inst_address):
     """
     Checks if the address is aligned according to the instruction alignment
     defined by the currentProgram's language
-    
+
     :param inst_address: Address of a potential instruction
     :type inst_address: ghidra.program.model.listing.Address
 
-    :returns: True if inst_address is properly aligned, False otherwise. 
+    :returns: True if inst_address is properly aligned, False otherwise.
     """
     alignment = currentProgram.getLanguage().getInstructionAlignment()
     return inst_address.offset % alignment == 0
@@ -65,13 +65,13 @@ def is_aligned_instruction_address(inst_address):
 
 def is_valid_function_end(last_instruction):
     """
-    Rudimentary valid function checker. Simply checks the last instruction for a 
+    Rudimentary valid function checker. Simply checks the last instruction for a
     terminating instruction, taking into account delay slots.
 
     :param last_instruction: Last instruction in a function.
     :type last_instruction: ghidra.program.model.listing.Instruction
 
-    :returns: True if valid function, False otherwise. 
+    :returns: True if valid function, False otherwise.
     """
     if last_instruction is None:
         return False
@@ -86,7 +86,7 @@ def is_valid_function_end(last_instruction):
 
 def find_function_end(function, max_address, instruction_length):
     """
-    Find the last instruction in a newly created function up to a maximum 
+    Find the last instruction in a newly created function up to a maximum
     address to prevent overrun into previously defined code.
 
     :param function: Newly created function to find end address.
@@ -96,7 +96,7 @@ def find_function_end(function, max_address, instruction_length):
     :type max_address: ghidra.program.model.listing.Address
 
     :param instruction_length: Instruction length to account for the functions
-                               max address functionality returning a value that 
+                               max address functionality returning a value that
                                representing the last byte of the last instruction.
     :type instruction_length: int
 
@@ -123,8 +123,8 @@ def find_function_end(function, max_address, instruction_length):
 
 def clear_listing(addr_list, symbols=False, function=False, register=False):
     """
-    Remove symbols, function, or registers from the list of addresses. 
-    Attempting to remove multiple entries concurrently may lead to an 
+    Remove symbols, function, or registers from the list of addresses.
+    Attempting to remove multiple entries concurrently may lead to an
     exception.
 
     :param addr_list: List of addresses to clear listings from.
@@ -170,7 +170,7 @@ def is_string(addr):
 
 def define_code_and_functions(start_addr, end_addr):
     """
-    Convert undefined code in the section provided to defined code and a 
+    Convert undefined code in the section provided to defined code and a
     function if applicable.
 
     :param section: Section to search for undefined code.

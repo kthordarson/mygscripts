@@ -1,9 +1,9 @@
 # Find local references to selected registers and local variables in the current function.
-# original author: fuzzywalls
+
 # @author kth
 # @category mygscripts
 # @keybinding
-# @menupath TNS.Local X-Refs
+# @menupath kthtools.Local X-Refs
 
 
 try:

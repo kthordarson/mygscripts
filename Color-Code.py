@@ -4,11 +4,11 @@
 # @category mygscripts
 #
 # original author: Gabi Marti. Twitter: @H0l3Bl4ck
-#@keybinding
-#@menupath Tools.Misc.Color Code
-#@toolbar 
+# @keybinding
+# @menupath Tools.Misc.Color Code
+# @toolbar
 #
-# date 01/05/2020  
+# date 01/05/2020
 # version 0.2
 #
 # Nota: Esta es una version muy temprana que requiere de algunas optimizaciones en el codigo.
@@ -56,7 +56,7 @@ C_CONTADOR = 4                          # Contador de instrucciones procesadas.
 
 # Definicion de array de mnemonicos analizados y sus propiedades
 #               Mnemonico,  SetColor,   ShowLog,  Color,                 Contador
-aMnemonics = [ ["CALL",     False,      False,    Color(250, 250, 100),     0], 
+aMnemonics = [ ["CALL",     False,      False,    Color(250, 250, 100),     0],
                ["TEST",     False,      False,    Color(200, 200, 255),     0],
                ["CMP",      False,      False,    Color(255, 50, 50),       0],
                ["JMP",      False,      False,    Color(240, 190, 190),     0],
@@ -93,7 +93,7 @@ def preguntaMnemonicos():
     eleccion = askChoices(titulo, texto, elementos, descripciones)
 
     print("Se coleararn los mnemonicos:")
-    for elemento in eleccion: 
+    for elemento in eleccion:
         aMnemonics[elemento][C_SETCOLOR] = True
         print(aMnemonics[elemento][C_MNEMONICO])
 
@@ -104,7 +104,7 @@ def preguntaMnemonicos():
     eleccion = askChoices(titulo, texto, elementos, descripciones)
 
     print("Se mostraran en el Log de consola los mnemonicos:")
-    for elemento in eleccion: 
+    for elemento in eleccion:
         aMnemonics[elemento][C_SHOWLOG] = True
         print(aMnemonics[elemento][C_MNEMONICO])
 
@@ -118,15 +118,15 @@ def setColor( direccion, mnemonico ):
     vcolor = Color.WHITE            # Por defecto colorea a blanco para borrar colores anteriores
 
     # busca mnemonico en el array
-    for nem in aMnemonics: 
+    for nem in aMnemonics:
         if mnemonico == nem[C_MNEMONICO]:
             nem[C_CONTADOR] += 1
-        
+
             if nem[C_SETCOLOR] == True:
                 vcolor = nem[C_COLOR]
-            
+
             if nem[C_SHOWLOG]:
-                label = str(getSymbolAt(direccion)) 
+                label = str(getSymbolAt(direccion))
                 if not label == "None":
                     print(label) + ": "
                 msg = "  " + str(direccion) + " : " + mnemonico + " "
@@ -144,16 +144,16 @@ def procesaCodigo():
     maxAddress = cProgram.getMaxAddress()
     totAddress = int(str(maxAddress),16) - int(str(minAddress),16)
     monitor.initialize(totAddress)
-    monitor.setMessage("Procesando mnemonicos ...")	
+    monitor.setMessage("Procesando mnemonicos ...")
     print("Rango de direcciones del programa: {} - {} (total {} bytes)".format(str(minAddress),str(maxAddress),str(totAddress)))
 
     pList  = cProgram.getListing()
     instructionIterator  = pList.getInstructions(True)
     dirAnterior = int(str(minAddress),16)
-    while instructionIterator.hasNext() and not monitor.isCancelled():      
+    while instructionIterator.hasNext() and not monitor.isCancelled():
         instruccion = instructionIterator.next()
         direccion = instruccion.getAddress()
-        monitor.setMessage("Coloreando mnemonicos {} ...".format(str(direccion)))	
+        monitor.setMessage("Coloreando mnemonicos {} ...".format(str(direccion)))
 
         # resetea color
         clearBackgroundColor(direccion)
@@ -167,7 +167,7 @@ def procesaCodigo():
 
         # Control barra de progreso
         salto = int(str(direccion),16) - dirAnterior
-        monitor.incrementProgress(salto)  
+        monitor.incrementProgress(salto)
 
         if not mnemonico == "None":
             setColor(direccion, mnemonico)
@@ -189,22 +189,22 @@ def muestraEstadisticas():
     tiempo_pasado = time.time() - tiempo_inicio
     print("Total tiempo procesado {} ".format(time.strftime("%H:%M:%S", time.gmtime(tiempo_pasado))))
     print("Total mnemonicos procesados:")
-    for nem in aMnemonics: 
+    for nem in aMnemonics:
         if nem[C_CONTADOR] > 0:
             print(" * {}   \t   {:7d}".format(nem[C_MNEMONICO],nem[C_CONTADOR]))
 
 
 if __name__ == '__main__':
     if isRunningHeadless():
-        print "Este script tiene que funcionar con el GUI de Ghidra"
+        print("Este script tiene que funcionar con el GUI de Ghidra")
         exit()
 
     serviceColor = state.getTool().getService(ColorizingService)
     if serviceColor is None:
-        print "No encuentro el servicio 'ColorizingService'"
+        print("No encuentro el servicio 'ColorizingService'")
         exit()
 
     preguntaMnemonicos()
-    procesaCodigo() 
+    procesaCodigo()
     muestraEstadisticas()
 

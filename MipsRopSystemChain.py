@@ -1,8 +1,8 @@
 # Build a ROP chain that can be used to call system with a controllable command.
-# original author: fuzzywalls
+
 # @author kth
 # @category mygscripts
-#@menupath TNS.Mips Rops.ROP Chains.System
+# @menupath kthtools.Mips Rops.ROP Chains.System
 
 try:
     from ghidra.ghidra_builtins import (
@@ -43,8 +43,8 @@ def find_system_calls(rop_finder, terminating, controllable, verbose):
         [system_call], terminating_calls=terminating,
         controllable_calls=controllable)
     if verbose:
-        print 'Found %d gadgets to call system.' % \
-            len(stack_finders.gadgets)
+        print('Found %d gadgets to call system.' %
+              len(stack_finders.gadgets))
     return stack_finders.gadgets
 
 
@@ -74,8 +74,8 @@ def find_stack_finders(rop_finder, terminating, controllable, verbose):
         [sf_saved_reg], terminating_calls=terminating,
         controllable_calls=controllable)
     if verbose:
-        print 'Found %d gadgets to find shellcode on the stack.' % \
-            len(stack_finders.gadgets)
+        print('Found %d gadgets to find shellcode on the stack.' %
+              len(stack_finders.gadgets))
     return stack_finders.gadgets
 
 
@@ -98,8 +98,8 @@ def find_move_a0(rop_finder, verbose):
     move_a0 = rop_finder.find_instructions([move_a0_ins],
                                            terminating_calls=False)
     if verbose:
-        print 'Found %d gadgets to move a register to $a0.' % \
-            len(move_a0.gadgets)
+        print('Found %d gadgets to move a register to $a0.' %
+              len(move_a0.gadgets))
     return move_a0.gadgets
 
 
@@ -174,7 +174,7 @@ def single_system_custom_find(link, controlled_registers, current_chain):
 
 def system_single_extended_jump(chain_builder, mips_rop):
     """
-    Find extended single gadgets that move a stack string to a registers and 
+    Find extended single gadgets that move a stack string to a registers and
     then move that register to a0. A custom find function is used to support
     this search.
 
@@ -215,7 +215,7 @@ def system_tail_two_jump(chain_builder, mips_rop):
 
 def system_two_jump_custom_find(link, controlled_registers, current_chain):
     """
-    Custom find to search for gadget that moves a register from a previous 
+    Custom find to search for gadget that moves a register from a previous
     jump to a0.
     """
     if not mipsropchain.default_gadget_search(
@@ -272,8 +272,8 @@ allow_reuse = 'reuse' not in special_options
 verbose = 'verbose' in special_options
 
 if verbose:
-    print 'You control registers: %s' % ', '.join(registers_controlled)
-    print 'Searching for required gadgets...'
+    print('You control registers: %s' % ', '.join(registers_controlled))
+    print('Searching for required gadgets...')
 
 chain_builder = mipsropchain.ChainBuilder(mips_rop, registers_controlled,
                                           chain_count, allow_reuse, verbose)
@@ -286,7 +286,7 @@ system_tail_two_jump(chain_builder, mips_rop)
 # If no chains were found or not enough add epilogues and keep searching.
 if not chain_builder.chains or len(chain_builder.chains) < chain_count:
     if verbose:
-        print 'Adding epilogues to control more registers.'
+        print('Adding epilogues to control more registers.')
 #
     epilogues = find_epilogue(mips_rop, registers_controlled)
     for system_find in [system_single_simple_jump, system_single_extended_jump,
@@ -296,6 +296,6 @@ if not chain_builder.chains or len(chain_builder.chains) < chain_count:
 
         system_find(chain_builder, mips_rop)
 
-print 'Found %d chains' % len(chain_builder.chains)
+print('Found %d chains' % len(chain_builder.chains))
 
 chain_builder.display_chains(verbose)

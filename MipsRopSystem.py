@@ -1,8 +1,8 @@
 # Find MIPS ROP gadgets for calling system with a user controlled argument.
-# original author: fuzzywalls
+
 # @author kth
 # @category mygscripts
-#@menupath TNS.Mips Rops.Gadgets.System Calls
+# @menupath kthtools.Mips Rops.Gadgets.System Calls
 
 
 try:

@@ -1,8 +1,8 @@
 # Print a summary of ROP gadgets that are bookmarked with ropX.
-# original author: fuzzywalls
+
 # @author kth
 # @category mygscripts
-#@menupath TNS.Mips Rops.Summary
+# @menupath kthtools.Mips Rops.Summary
 
 
 try:

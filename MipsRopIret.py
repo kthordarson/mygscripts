@@ -1,8 +1,8 @@
 # Find MIPS ROP gadgets that perform an indirect return. (Call t9, return to ra.)
-# original author: fuzzywalls
+
 # @author kth
 # @category mygscripts
-#@menupath TNS.Mips Rops.Gadgets.Indirect Return
+# @menupath kthtools.Mips Rops.Gadgets.Indirect Return
 
 
 try:

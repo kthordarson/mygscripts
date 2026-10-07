@@ -1,8 +1,8 @@
 # Fixup .data and .rodata sections by defining strings and forcing remaining undefined data to be a DWORD.
-# original author: fuzzywalls
+
 # @author kth
 # @category mygscripts
-#@menupath TNS.Codatify.Fixup Data
+# @menupath kthtools.Codatify.Fixup Data
 
 
 try:
@@ -87,7 +87,7 @@ def get_pointer_type():
 
 def define_pointers(section):
     """
-    Convert undefined data to valid pointers. 
+    Convert undefined data to valid pointers.
 
     :param section: The section to convert pointers in.
     :type section: ghidra.program.model.listing.ProgramFragment
@@ -162,7 +162,7 @@ def define_data(section):
 
 def fixup_section(section):
     """
-    Fixup the section by defining strings and converting undefined data to 
+    Fixup the section by defining strings and converting undefined data to
     DWORDs.
 
     :param section: Section to fixup.

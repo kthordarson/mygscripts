@@ -2,7 +2,7 @@
 # original author: ReverseEngineer
 # @author kth
 # @category mygscripts
-#@menupath Tools.Create Functions From Pointer Table (Safe)
+# @menupath Tools.Create Functions From Pointer Table (Safe)
 
 try:
 	from ghidra.ghidra_builtins import (

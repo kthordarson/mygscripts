@@ -1,8 +1,7 @@
 # Identify potential POSIX functions in the current program such as sprintf, fprintf, sscanf, etc.
-# original author: fuzzywalls
 # @author kth
 # @category mygscripts
-# @menupath TNS.Leaf Blower.Find format string functions
+# @menupath kthtools.Leaf Blower.Find format string functions
 
 
 try:

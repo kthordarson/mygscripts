@@ -14,7 +14,6 @@ from collections import defaultdict
 from ghidra_api.decomp_utils import DecompUtils
 import logging
 
-
 DO_DECOMPILE = False
 log = logging.getLogger(__file__)
 log.addHandler(logging.StreamHandler())
@@ -32,7 +31,7 @@ last_op = None
 for instr in listing.getInstructions(True):
     raw_ops = list(instr.getPcode())
     for op in raw_ops:
-        if not op.opcode in target_ops:
+        if op.opcode not in target_ops:
             last_op = op.opcode
             continue
 
@@ -49,7 +48,7 @@ for instr in listing.getInstructions(True):
 
 func_to_op_count_list = list(func_to_op_count.items())
 func_to_op_count_list.sort(key=lambda a: a[1], reverse=True)
-
+print(f'Found {len(func_to_op_count_list)} functions with non-trivial XOR operations.')
 if DO_DECOMPILE is True:
     log.debug("%d functions to decompile. This stage can be disabled for better speed and worse accuracy" % len(func_to_op_count_list))
 
@@ -71,7 +70,6 @@ if DO_DECOMPILE is True:
             func_to_true_op_addrs[func].append(op.seqnum.target)
             func_to_true_op[func].append(op)
 
-
     func_to_true_op_count_list = list(func_to_true_op_count.items())
     func_to_true_op_count_list.sort(key=lambda a: a[1], reverse=True)
     func_to_op = func_to_true_op
@@ -84,7 +82,6 @@ if DO_DECOMPILE is True:
 for func, num_cmps in func_to_op_count_list[:100]:
     addrs = func_to_addrs[func]
     print("%s : %d" % (func, num_cmps))
-
 
 
 # print none addrs so that new functions can be defined

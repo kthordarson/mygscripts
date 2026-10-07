@@ -1,8 +1,8 @@
 # Identify potential POSIX functions in the current program such as strcpy, strcat, memcpy, atoi, strlen, etc.
-# original author: fuzzywalls
+
 # @author kth
 # @category mygscripts
-#@menupath TNS.Leaf Blower.Find leaf functions
+# @menupath kthtools.Leaf Blower.Find leaf functions
 
 
 try:

@@ -1,9 +1,9 @@
 # Rename saved stack variables in MIPS programs.
-# original author: fuzzywalls
+
 # @author kth
 # @category mygscripts
 # @keybinding
-# @menupath TNS.Rename Variables
+# @menupath kthtools.Rename Variables
 
 try:
     from ghidra.ghidra_builtins import (

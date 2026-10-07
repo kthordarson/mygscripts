@@ -1,8 +1,8 @@
 # Find MIPS ROP gadgets that put a stack address in a register.
-# original author: fuzzywalls
+
 # @author kth
 # @category mygscripts
-#@menupath TNS.Mips Rops.Gadgets.Stack Finder
+# @menupath kthtools.Mips Rops.Gadgets.Stack Finder
 
 
 try:

@@ -2,9 +2,9 @@
 # original author: ReverseEngineer
 # @author kth
 # @category mygscripts
-#@keybinding
-#@menupath Tools.Create Functions From Table
-#@toolbar
+# @keybinding
+# @menupath Tools.Create Functions From Table
+# @toolbar
 
 try:
     from ghidra.ghidra_builtins import (

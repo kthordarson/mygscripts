@@ -1,8 +1,7 @@
-#Highlight or un-highlight function calls.
-# original author: fuzzywalls
+# Highlight or un-highlight function calls.
 # @author kth
 # @category mygscripts
-#@menupath TNS.Un/Highlight Function Calls
+# @menupath kthtools.Un/Highlight Function Calls
 
 
 try:
@@ -17,10 +16,12 @@ except ImportError:
 from java.awt import Color
 from ghidra.program.model.symbol import RefType
 
-answer = askChoice('Highlight?',
-                   'Highlight or un-highlight function calls?',
-                   ['highlight', 'un-highlight'],
-                   'highlight')
+answer = askChoice(
+    "Highlight?",
+    "Highlight or un-highlight function calls?",
+    ["highlight", "un-highlight"],
+    "highlight",
+)
 
 # Dull yellow color.
 highlight_color = Color(250, 250, 125)
@@ -32,7 +33,7 @@ instructions = code_manager.getInstructions(image_base, True)
 
 for ins in instructions:
     if ins.getFlowType().isCall():
-        if answer == 'highlight':
+        if answer == "highlight":
             setBackgroundColor(ins.getAddress(), highlight_color)
         else:
             clearBackgroundColor(ins.getAddress())

@@ -1,8 +1,8 @@
 # Display call chain graph between two functions and output to the console.
-# original author: fuzzywalls
+
 # @author kth
 # @category mygscripts
-#@menupath TNS.Call Chain
+# @menupath kthtools.Call Chain
 
 try:
     from ghidra.ghidra_builtins import (
@@ -34,7 +34,7 @@ def get_references(caller, callee):
     :return: List of addresses where the caller calls the callee.
     :rtype: list
     """
-    function_manager = currentProgram().getFunctionManager()
+    function_manager = currentProgram.getFunctionManager()
 
     ref_list = []
     callee_symbol = callee.getSymbol()
@@ -91,12 +91,13 @@ def print_call_chain(call_chain, dot):
         previous_function = function
         function_chain.append(str(function))
 
+    parts = []
     for function in function_chain:
-        print function,
+        parts.append(str(function))
         if function in function_references:
-            print function_references[function],
-            print ' -> ',
-    print ''
+            parts.append(str(function_references[function]))
+            parts.append(' -> ')
+    print(' '.join(parts))
 
 
 def call_chain_recurse(call_chain, complete_call, dot):
@@ -136,7 +137,7 @@ def discover_call_chain(from_function, to_function):
         dot.render(tmp_file, view=True)
 
 
-func_man = currentProgram().getFunctionManager()
+func_man = currentProgram.getFunctionManager()
 function_list = [function for function in func_man.getFunctions(True)]
 function_list.sort(key=lambda func: str(func))
 
@@ -151,6 +152,6 @@ to_function = askChoice('Select function',
                         function_list,
                         function_list[0])
 
-print 'Finding x-refs from %s to %s\n' % (from_function, to_function)
+print('Finding x-refs from %s to %s\n' % (from_function, to_function))
 
 discover_call_chain(from_function, to_function)

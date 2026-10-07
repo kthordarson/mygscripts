@@ -2,9 +2,9 @@
 # original author: ReverseEngineer
 # @author kth
 # @category mygscripts
-#@keybinding
-#@menupath Tools.Delphi.Fix VARIANT Helpers
-#@toolbar
+# @keybinding
+# @menupath Tools.Delphi.Fix VARIANT Helpers
+# @toolbar
 
 try:
     from ghidra.ghidra_builtins import (
@@ -12,9 +12,10 @@ try:
     )
 except ImportError:
     pass
-from ghidra.program.model.data import *
-from ghidra.program.model.symbol import *
-from ghidra.program.model.listing import *
+from ghidra.program.model.data import DataTypeConflictHandler, TypedefDataType, IntegerDataType, ShortDataType, WideCharDataType, PointerDataType, UnsignedIntegerDataType
+# from ghidra.program.model.symbol import *
+from ghidra.program.model.listing import ParameterImpl, Function, CodeUnit, SourceType
+
 # from ghidra.app.util import DataTypeParser
 from ghidra.util import Msg
 
@@ -22,6 +23,7 @@ program = currentProgram
 dtm = program.getDataTypeManager()
 listing = program.getListing()
 symtab = program.getSymbolTable()
+
 
 # ------------------------------------------------------------
 # Helper: ensure data type exists
@@ -32,13 +34,17 @@ def get_or_create(name, dt):
         return existing
     return dtm.addDataType(dt, DataTypeConflictHandler.DEFAULT_HANDLER)
 
+
 # ------------------------------------------------------------
 # Define Delphi / OLE types
 # ------------------------------------------------------------
 HRESULT = get_or_create("HRESULT", TypedefDataType("HRESULT", IntegerDataType()))
-VARIANT_BOOL = get_or_create("VARIANT_BOOL", TypedefDataType("VARIANT_BOOL", ShortDataType()))
+VARIANT_BOOL = get_or_create(
+    "VARIANT_BOOL", TypedefDataType("VARIANT_BOOL", ShortDataType())
+)
 LPCWSTR = get_or_create("LPCWSTR", PointerDataType(WideCharDataType()))
 UINT = get_or_create("UINT", UnsignedIntegerDataType())
+
 
 # ------------------------------------------------------------
 # Function signature for VarBoolFromOleStr
@@ -54,8 +60,10 @@ def apply_varbool_signature(func):
         Function.FunctionUpdateType.DYNAMIC_STORAGE_FORMAL_PARAMS,
         True,
         SourceType.USER_DEFINED,
-        params
+        params,
     )
+
+
 if __name__ == "__main__":
     # ------------------------------------------------------------
     # Main heuristic scan
@@ -100,7 +108,7 @@ if __name__ == "__main__":
             "Converts VT_BSTR (OLE string) to VARIANT_BOOL\n"
             "Uses LStrFromWStr + TryStrToBool\n"
             "Returns HRESULT",
-            CodeUnit.PLATE_COMMENT
+            CodeUnit.PLATE_COMMENT,
         )
 
     Msg.info(None, "Delphi VARIANT helper auto-fix complete.")

@@ -2,9 +2,9 @@
 # original author: buherator
 # @author kth
 # @category mygscripts
-#@keybinding 
-#@menupath 
-#@toolbar 
+# @keybinding
+#@menupath
+# @toolbar
 
 try:
     from ghidra.ghidra_builtins import (
@@ -52,7 +52,7 @@ class RabbitHoleCCColumn(ColumnDisplay):
         return rowObj.getCycloComplexity()
 
     def getColumnName(self):
-        return "Cumulative Complexity"  
+        return "Cumulative Complexity"
 
     def getColumnClass(self):
         return int
@@ -67,7 +67,7 @@ class RabbitHoleNameColumn(ColumnDisplay):
         return rowObj.getName()
 
     def getColumnName(self):
-        return "Function name"  
+        return "Function name"
 
     def getColumnClass(self):
         return str
@@ -77,7 +77,7 @@ class RabbitHoleNameColumn(ColumnDisplay):
         n2 = r2.getName()
         if n1 < n2:
             return -1
-        elif n2 > n1: 
+        elif n2 > n1:
             return 1
         else:
             return 0
@@ -98,7 +98,7 @@ def recurse_cyclo(func, visited):
     cc = cyclomaticComplexity.calculateCyclomaticComplexity(func, TaskMonitor.DUMMY)
     for f in func.getCalledFunctions(TaskMonitor.DUMMY):
         cc += recurse_cyclo(f, visited)
-    
+
     CYCLO_MAP[entry] = cc
 
     return cc

@@ -1,8 +1,8 @@
 # Create "fuzzy" function signatures that can be shared an applied amongst different Ghidra projects.
-# original author: fuzzywalls
+
 # @author kth
 # @category mygscripts
-#@menupath TNS.Rizzo.Save Signatures
+# @menupath kthtools.Rizzo.Save Signatures
 
 
 try:
@@ -18,7 +18,7 @@ file_path = askFile('Save signature file as', 'OK').path
 if not file_path.endswith('.riz'):
     file_path += '.riz'
 
-print 'Building Rizzo signatures, this may take a few minutes...'
+print('Building Rizzo signatures, this may take a few minutes...')
 
 rizz = rizzo.Rizzo(currentProgram)
 rizz.save(file_path)

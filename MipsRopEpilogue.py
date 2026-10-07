@@ -1,8 +1,8 @@
 # Find MIPS ROP gadgets for gaining control of more registers through function epilogues.
-# original author: fuzzywalls
+
 # @author kth
 # @category mygscripts
-#@menupath TNS.Mips Rops.Gadgets.Epilogue
+# @menupath kthtools.Mips Rops.Gadgets.Epilogue
 
 
 try:
@@ -27,7 +27,7 @@ if min_reg == 'Any':
     min_reg = None
 
 if min_reg:
-    print 'Searching for function epilogues that grant control of registers up to %s...' % min_reg
+    print('Searching for function epilogues that grant control of registers up to %s...' % min_reg)
 
 epilogue = mipsrop.MipsInstruction('.*lw', 'ra')
 

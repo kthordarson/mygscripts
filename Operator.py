@@ -1,8 +1,8 @@
 # Find calls to a function and display source of parameters.
-# original author: fuzzywalls
+
 # @author kth
 # @category mygscripts
-#@menupath TNS.Operator
+# @menupath kthtools.Operator
 
 try:
     from ghidra.ghidra_builtins import (
@@ -87,7 +87,8 @@ def find_call(address):
     """
     containing_function = getFunctionContaining(address)
     if not containing_function:
-        return argument
+        print("No containing function found for address: %s" % address)
+        return None
 
     entry_point = containing_function.getEntryPoint()
 
@@ -158,9 +159,9 @@ def get_argument_source(address, argument):
     :type address: ghidra.program.model.listing.Address
 
     :param argument: Argument to search for.
-    :type argument: str 
+    :type argument: str
 
-    :returns: Source for argument either as register string or full operation 
+    :returns: Source for argument either as register string or full operation
               string.
     :rtype: str
     """
@@ -309,7 +310,7 @@ class Operator(object):
 
     def get_callee(self):
         """
-        Request user defined functions and identify when that function is 
+        Request user defined functions and identify when that function is
         called.
         """
         self._function_list.sort(key=lambda func: func.name)
@@ -328,7 +329,7 @@ class Operator(object):
         registers / strings passed to the function.
         """
         if not len(self.function_calls):
-            print 'No function calls to %s found.' % self.function.name
+            print('No function calls to %s found.' % self.function.name)
             return
 
         arg_registers = get_argument_registers()
@@ -351,7 +352,7 @@ class Operator(object):
             # Check for variable length arguments and format strings. Add
             # arguments if they are found.
             if operator.function.has_var_args:
-                format_string_count = source.count('%') - source.count('\%')
+                format_string_count = source.count('%') - source.count(r'\%')
                 arg_count = operator.function.arg_count
 
                 # Find additional arguments taking into account the number
@@ -386,6 +387,6 @@ utils.allowed_processors(currentProgram, ['MIPS', 'ARM'])
 operator = Operator()
 operator.get_callee()
 
-print 'Identifying calls to %s...' % operator.function.name
+print('Identifying calls to %s...' % operator.function.name)
 
 operator.list_calls()

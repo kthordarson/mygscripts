@@ -1,8 +1,8 @@
 # Find all cross references in the current function.
-# original author: fuzzywalls
+
 # @author kth
 # @category mygscripts
-#@menupath TNS.Function Profiler
+# @menupath kthtools.Function Profiler
 
 try:
     from ghidra.ghidra_builtins import (
@@ -31,7 +31,7 @@ def get_instruction_list(code_manager, function):
 
 def get_function(function_manager, address):
     """
-    Return the function that contains the address. 
+    Return the function that contains the address.
 
     :param address: Address within function.
 
@@ -192,10 +192,10 @@ class CrossRef(object):
                     self.symbol_name = symbol_name[3:]
                 self.symbol_type = 'String'
             else:
-                self.symbol_name = symbol.getName() 
+                self.symbol_name = symbol.getName()
         except AttributeError:
-            self.symbol_name = symbol.getName() 
-            
+            self.symbol_name = symbol.getName()
+
     def __str__(self):
         return str(self.from_addr) + ' ' + str(self.symbol_name)
 
@@ -204,22 +204,22 @@ class FunctionCrossReferences(object):
     def __init__(self, function):
         self.function = function
         self.cross_references = []
-        
+
     def append(self, cross_ref):
         self.cross_references.append(cross_ref)
-        
+
     def _loop_print(self, label):
         print ('\n{}\n{}'.format(label, '-' * len(label)))
         for cr in self.cross_references:
             if cr.symbol_type == label:
                 print (cr)
-        
+
     def pretty_print(self):
         print ('\nCross References in {}\n{}'.format(function, '-' * 30))
         self._loop_print('String')
         self._loop_print('Function')
         self._loop_print('Label')
-         
+
 
 code_manager = currentProgram.getCodeManager()
 function_manager = currentProgram.getFunctionManager()
@@ -240,5 +240,5 @@ for instruction in instructions:
         ref_type != RefType.CONDITIONAL_JUMP and \
         ref_type != RefType.UNCONDITIONAL_JUMP:
             cross_references.append(CrossRef(reference))
-            
+
 cross_references.pretty_print()
