@@ -1,9 +1,19 @@
-#@author ReverseEngineer
-#@category Functions
+# Create functions from a pointer table and name them handler_<addr>
+# original author: ReverseEngineer
+# @author kth
+# @category mygscripts
 #@keybinding
 #@menupath Tools.Create Functions From Table
 #@toolbar
 
+try:
+    from ghidra.ghidra_builtins import (
+        createFunction,
+        currentProgram,
+        toAddr,
+    )
+except ImportError:
+    pass
 from ghidra.program.model.symbol import SourceType
 from ghidra.program.model.address import Address
 

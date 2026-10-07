@@ -1,6 +1,6 @@
+# @description Smart rename DAT_* globals using access + function context
 # @category mygscripts
 # @author kth
-# @description Smart rename DAT_* globals using access + function context
 
 try:
 	from ghidra.ghidra_builtins import (

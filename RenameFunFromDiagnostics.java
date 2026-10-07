@@ -1,6 +1,6 @@
-
 // Recover source-level function names embedded in os_print_write/__assert_fail calls.
-//@category ReverseEngineering
+// @author kth
+// @category mygscripts
 import ghidra.app.script.GhidraScript;
 import ghidra.app.decompiler.*;
 import ghidra.program.model.address.*;

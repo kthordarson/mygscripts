@@ -1,6 +1,7 @@
 # A cross-decompiler collaboration plugin
-# @author BinSync Team
-# @category Collaboration
+# original author: BinSync Team
+# @author kth
+# @category mygscripts
 # @menupath Tools.BinSync.Connect...
 # @runtime PyGhidra
 
@@ -21,7 +22,7 @@ def PLUGIN_ENTRY(*args, **kwargs):
     return create_plugin(*args, **kwargs)
 
 try:
-    import idaapi
+    import idaapi  # type: ignore
     HAS_IDA = True
 except ImportError:
     HAS_IDA = False

@@ -1,6 +1,7 @@
 # Run a ghidra_bridge server in background/no-GUI-mode for external python environments to interact with
-# @author justfoxing
-# @category Bridge
+# original author: justfoxing
+# @author kth
+# @category mygscripts
 # @menupath Tools.Ghidra Bridge.Run in Background
 # @toolbar python.png
 

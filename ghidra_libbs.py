@@ -1,6 +1,7 @@
 # Starts the LibBS backend for Ghidra scripts.
-# @author LibBS
-# @category LibBS
+# original author: LibBS
+# @author kth
+# @category mygscripts
 # @menupath Tools.LibBS.Start LibBS Backend
 
 import subprocess

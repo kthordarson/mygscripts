@@ -1,8 +1,17 @@
 # Build a ROP chain that can be used to call shellcode.
-#@author fuzzywalls
-#@category TNS
+# original author: fuzzywalls
+# @author kth
+# @category mygscripts
 #@menupath TNS.Mips Rops.ROP Chains.Shellcode
 
+try:
+    from ghidra.ghidra_builtins import (
+        askChoices,
+        askInt,
+        currentProgram,
+    )
+except ImportError:
+    pass
 from utils import mipsropchain, mipsrop, utils
 
 utils.allowed_processors(currentProgram, 'MIPS')

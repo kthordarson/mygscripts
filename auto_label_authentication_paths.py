@@ -1,6 +1,13 @@
+# Bookmark/label authentication paths that call crypt_dispatch
 # @author kth
 # @category mygscripts
-from ghidra.program.model.symbol import SourceType
+try:
+    from ghidra.ghidra_builtins import (
+        currentProgram,
+    )
+except ImportError:
+    pass
+from ghidra.program.model.symbol import SourceType, SymbolType
 from ghidra.program.model.listing import BookmarkType
 
 fm = currentProgram.getFunctionManager()

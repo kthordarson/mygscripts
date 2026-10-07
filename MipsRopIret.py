@@ -1,9 +1,16 @@
 # Find MIPS ROP gadgets that perform an indirect return. (Call t9, return to ra.)
-#@author fuzzywalls
-#@category TNS
+# original author: fuzzywalls
+# @author kth
+# @category mygscripts
 #@menupath TNS.Mips Rops.Gadgets.Indirect Return
 
 
+try:
+    from ghidra.ghidra_builtins import (
+        currentProgram,
+    )
+except ImportError:
+    pass
 from utils import mipsrop, utils
 
 utils.allowed_processors(currentProgram, 'MIPS')

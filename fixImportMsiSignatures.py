@@ -1,5 +1,12 @@
+# Fix function signatures for MSI.DLL imports
 # @author kth
 # @category mygscripts
+try:
+    from ghidra.ghidra_builtins import (
+        getGlobalFunctions,
+    )
+except ImportError:
+    pass
 import ghidra.app.script.GhidraScript
 import ghidra.program.model.symbol.SourceType
 

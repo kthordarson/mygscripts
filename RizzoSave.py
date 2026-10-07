@@ -1,9 +1,17 @@
 # Create "fuzzy" function signatures that can be shared an applied amongst different Ghidra projects.
-#@author fuzzywalls
-#@category TNS
+# original author: fuzzywalls
+# @author kth
+# @category mygscripts
 #@menupath TNS.Rizzo.Save Signatures
 
 
+try:
+    from ghidra.ghidra_builtins import (
+        askFile,
+        currentProgram,
+    )
+except ImportError:
+    pass
 from utils import rizzo
 
 file_path = askFile('Save signature file as', 'OK').path

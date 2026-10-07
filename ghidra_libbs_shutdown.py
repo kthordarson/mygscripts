@@ -1,6 +1,7 @@
 # Shutdown the LibBS backend server.
-# @author LibBS
-# @category LibBS
+# original author: LibBS
+# @author kth
+# @category mygscripts
 # @menupath Tools.LibBS.Shutdown LibBS Backend
 
 from libbs_vendored.jfx_bridge import bridge

@@ -4,6 +4,17 @@
 # @category mygscripts
 # @runtime pyghidra
 
+try:
+    from ghidra.ghidra_builtins import (
+        currentProgram,
+        currentSelection,
+        getBytes,
+        getInstructionContaining,
+        setPreComment,
+        toAddr,
+    )
+except ImportError:
+    pass
 import re
 from collections import namedtuple
 from itertools import chain

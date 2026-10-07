@@ -1,9 +1,16 @@
 # Find MIPS ROP gadgets for calling system with a user controlled argument.
-#@author fuzzywalls
-#@category TNS
+# original author: fuzzywalls
+# @author kth
+# @category mygscripts
 #@menupath TNS.Mips Rops.Gadgets.System Calls
 
 
+try:
+    from ghidra.ghidra_builtins import (
+        currentProgram,
+    )
+except ImportError:
+    pass
 from utils import mipsrop, utils
 
 utils.allowed_processors(currentProgram, 'MIPS')

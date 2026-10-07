@@ -1,5 +1,6 @@
-
+// Create TMethodPointer64/BufferHeader structs and apply method-list function signatures
 // ApplyMethodListSig.java
+// @author kth
 // @category mygscripts
 
 import ghidra.app.cmd.function.ApplyFunctionSignatureCmd;

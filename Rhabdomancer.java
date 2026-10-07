@@ -33,8 +33,9 @@
 
 // This script locates all calls to potentially insecure functions, in order to
 // speed up static analysis for vulnerability research purposes.
-// @author Marco Ivaldi <raptor@0xdeadbeef.info>
-// @category VulnDev
+// @author kth
+// @category mygscripts
+// original author: Marco Ivaldi <raptor@0xdeadbeef.info>
 // @keybinding Y
 // @menupath Tools.Rhabdomancer
 // @toolbar 

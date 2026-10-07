@@ -1,6 +1,7 @@
+// Detect functions containing overlapping instructions
+// @author kth
+// @category mygscripts
 //
-//@author 
-//@category 
 //@keybinding
 //@menupath
 //@toolbar

@@ -1,3 +1,4 @@
+# Rename and retype LibTomCrypt wrapper functions
 # @author kth
 # @category mygscripts
 # @keybinding

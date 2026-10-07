@@ -1,6 +1,12 @@
+# Export function/label symbols as radare2 commands
 # @author kth
 # @category mygscripts
-# Save as export_symbols.py in Ghidra's script directory
+try:
+	from ghidra.ghidra_builtins import (
+		currentProgram,
+	)
+except ImportError:
+	pass
 from ghidra.program.model.symbol import SymbolType
 output_file = "/home/kth/Games/atomiciso/bm95exesymbols.r2"
 symbolnames = [symbol.getName() for symbol in currentProgram().getSymbolTable().getAllSymbols(True)]

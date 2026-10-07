@@ -1,5 +1,19 @@
 #Rename + retype BM.EXE spawn/path/float cluster (Watcom conventions)
-#@category BM
+# @author kth
+# @category mygscripts
+try:
+    from ghidra.ghidra_builtins import (
+        clearListing,
+        createAsciiString,
+        createLabel,
+        currentProgram,
+        getDataAt,
+        getFunctionAt,
+        getSymbolAt,
+        toAddr,
+    )
+except ImportError:
+    pass
 from ghidra.program.model.listing import ParameterImpl, ReturnParameterImpl, VariableStorage
 from ghidra.program.model.listing.Function import FunctionUpdateType
 from ghidra.program.model.symbol import SourceType

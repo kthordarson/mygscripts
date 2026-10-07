@@ -1,9 +1,17 @@
 # Apply "fuzzy" function signatures from a different Ghidra project.
-#@author fuzzywalls
-#@category TNS
+# original author: fuzzywalls
+# @author kth
+# @category mygscripts
 #@menupath TNS.Rizzo.Apply Signatures
 
 
+try:
+    from ghidra.ghidra_builtins import (
+        askFile,
+        currentProgram,
+    )
+except ImportError:
+    pass
 from utils import rizzo
 
 file_path = askFile('Load signature file', 'OK').path

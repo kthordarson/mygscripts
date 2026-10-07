@@ -1,7 +1,23 @@
 # Script to detect Stack strings, and retype the dynamically loaded Windows API where possible
-# @author BitsOfBinary
-# @category Analysis
+# original author: BitsOfBinary
+# @author kth
+# @category mygscripts
 
+try:
+    from ghidra.ghidra_builtins import (
+        createData,
+        createLabel,
+        currentAddress,
+        getDataTypes,
+        getFirstFunction,
+        getFirstInstruction,
+        getFunctionAfter,
+        getFunctionContaining,
+        getState,
+        getSymbolAt,
+    )
+except ImportError:
+    pass
 from ghidra.app.script import GhidraScript
 from ghidra.app.services import DataTypeManagerService
 from ghidra.program.model.util import CodeUnitInsertionException

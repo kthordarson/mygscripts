@@ -1,6 +1,7 @@
 # Shutdown a running ghidra_bridge server cleanly
-# @author justfoxing
-# @category Bridge
+# original author: justfoxing
+# @author kth
+# @category mygscripts
 # @menupath Tools.Ghidra Bridge.Shutdown
 
 from jfx_bridge import bridge

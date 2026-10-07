@@ -7,6 +7,14 @@
 # @toolbar
 
 #from binascii import hexlify
+try:
+	from ghidra.ghidra_builtins import (
+		askAddress,
+		askString,
+		currentProgram,
+	)
+except ImportError:
+	pass
 from ghidra.program.model.data import DataTypeConflictHandler
 from ghidra.program.model.data import StructureDataType
 from ghidra.program.model.data import DataType

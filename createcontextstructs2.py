@@ -1,5 +1,13 @@
+# Extend GlobalContext and create ArrayDescriptor/ResourceContext structs
 # @author kth
 # @category mygscripts
+try:
+    from ghidra.ghidra_builtins import (
+        currentProgram,
+        getFunctionAt,
+    )
+except ImportError:
+    pass
 from ghidra.program.model.data import StructureDataType, UnsignedIntegerDataType, UnsignedCharDataType, ArrayDataType, PointerDataType, VoidDataType
 from ghidra.program.model.symbol import SourceType
 from ghidra.util.task import TaskMonitor

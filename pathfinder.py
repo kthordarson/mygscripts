@@ -2,6 +2,15 @@
 # @author kth
 # @category mygscripts
 
+try:
+	from ghidra.ghidra_builtins import (
+		askString,
+		currentProgram,
+		getSymbol,
+		monitor,
+	)
+except ImportError:
+	pass
 from ghidra.app.util.bin import ByteProvider, RandomAccessByteProvider, BinaryReader
 from ghidra.program.model.symbol import RefType
 from ghidra.program.model.address import AddressFormatException

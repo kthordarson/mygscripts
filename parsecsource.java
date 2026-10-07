@@ -1,4 +1,7 @@
+// Parse a C source file and list function declarations
 // ParseCScript.java
+// @author kth
+// @category mygscripts
 import ghidra.app.script.GhidraScript;
 import java.io.*;
 import java.util.regex.*;

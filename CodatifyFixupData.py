@@ -1,9 +1,25 @@
 # Fixup .data and .rodata sections by defining strings and forcing remaining undefined data to be a DWORD.
-#@author fuzzywalls
-#@category TNS
+# original author: fuzzywalls
+# @author kth
+# @category mygscripts
 #@menupath TNS.Codatify.Fixup Data
 
 
+try:
+    from ghidra.ghidra_builtins import (
+        askYesNo,
+        createAsciiString,
+        createData,
+        createDWord,
+        currentProgram,
+        findStrings,
+        getReferencesFrom,
+        getUndefinedDataAfter,
+        getUndefinedDataAt,
+        removeDataAt,
+    )
+except ImportError:
+    pass
 from utils import functiontable
 import sys
 try:
@@ -55,7 +71,8 @@ def define_strings(section):
             try:
                 createAsciiString(string.getAddress())
                 string_count += 1
-            except:
+            except Exception as e:
+                print("[!] define_strings: {}".format(e))
                 continue
 
     print ('Strings - {}'.format(string_count))
@@ -104,8 +121,8 @@ def define_pointers(section):
                     removeDataAt(undefined_addr)
             else:
                 removeDataAt(undefined_addr)
-        except:
-            pass
+        except Exception as e:
+            print("[!] define_pointers: {}".format(e))
         finally:
             undefined_data = getUndefinedDataAfter(undefined_addr)
 
@@ -136,7 +153,8 @@ def define_data(section):
         try:
             createDWord(undefined_addr)
             data_count += 1
-        except:
+        except Exception as e:
+            print("[!] define_data: {}".format(e))
             continue
 
     print ('DWORDS - {}'.format(data_count))

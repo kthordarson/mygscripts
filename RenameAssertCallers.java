@@ -1,5 +1,6 @@
-
-//@category ReverseEngineering
+// Rename FUN_* callers of __assert_fail using the function-name string argument
+// @author kth
+// @category mygscripts
 import ghidra.app.script.GhidraScript;
 import ghidra.app.decompiler.*;
 import ghidra.program.model.listing.*;

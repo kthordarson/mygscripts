@@ -1,9 +1,19 @@
 #Highlight or un-highlight function calls.
-#@author fuzzywalls
-#@category TNS
+# original author: fuzzywalls
+# @author kth
+# @category mygscripts
 #@menupath TNS.Un/Highlight Function Calls
 
 
+try:
+    from ghidra.ghidra_builtins import (
+        askChoice,
+        clearBackgroundColor,
+        currentProgram,
+        setBackgroundColor,
+    )
+except ImportError:
+    pass
 from java.awt import Color
 from ghidra.program.model.symbol import RefType
 

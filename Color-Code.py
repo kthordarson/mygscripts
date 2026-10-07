@@ -1,8 +1,9 @@
 # ESP: Colorea algunas partes del codigo para una mejor identificacion visual.
 # ENG: Color some parts of the code for better visual identification.
+# @author kth
+# @category mygscripts
 #
-#@author Gabi Marti. Twitter: @H0l3Bl4ck
-#@category Colors
+# original author: Gabi Marti. Twitter: @H0l3Bl4ck
 #@keybinding
 #@menupath Tools.Misc.Color Code
 #@toolbar 
@@ -18,6 +19,19 @@
 #                       Opcion en barra de menu de Ghidra
 
 
+try:
+    from ghidra.ghidra_builtins import (
+        askChoices,
+        clearBackgroundColor,
+        getCurrentProgram,
+        getSymbolAt,
+        isRunningHeadless,
+        monitor,
+        setBackgroundColor,
+        state,
+    )
+except ImportError:
+    pass
 import time
 import ghidra.program.model.listing
 

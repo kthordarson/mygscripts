@@ -1,8 +1,16 @@
+# @description Script requests current variable name and desired new name. It then iterates through all functions, renaming local variables and parameters. Note: Script does not verify that no other variable/parameter within the function is already using the new name.
 # @author kth
 # @category mygscripts
-# @description Script requests current variable name and desired new name. It then iterates through all functions, renaming local variables and parameters. Note: Script does not verify that no other variable/parameter within the function is already using the new name.
 # @menupath CustomerSubmission.Search.Rename Variable or Parameter (Python)
 
+try:
+    from ghidra.ghidra_builtins import (
+        askString,
+        currentProgram,
+        monitor,
+    )
+except ImportError:
+    pass
 from ghidra.program.model.symbol import SourceType
 from ghidra.util.exception import InvalidInputException, DuplicateNameException
 

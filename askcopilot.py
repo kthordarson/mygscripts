@@ -1,8 +1,16 @@
-# @author kth
-# @category mygscripts
 # GptHidra with GitHub Copilot CLI support
 # Author: Modified for Kristjan Thordarson
+# @author kth
+# @category mygscripts
 
+try:
+    from ghidra.ghidra_builtins import (
+        currentAddress,
+        currentProgram,
+        getFunctionContaining,
+    )
+except ImportError:
+    pass
 import os
 import tempfile
 import subprocess

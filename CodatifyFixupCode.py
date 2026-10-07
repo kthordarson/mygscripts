@@ -1,8 +1,26 @@
 # Fixup .text section by defining all undefined code and converting it to a function if applicable.
-#@author fuzzywalls
-#@category TNS
+# original author: fuzzywalls
+# @author kth
+# @category mygscripts
 #@menupath TNS.Codatify.Fixup Code
 
+try:
+    from ghidra.ghidra_builtins import (
+        clearListing,
+        createAsciiString,
+        createFunction,
+        currentProgram,
+        disassemble,
+        getAddressFactory,
+        getBytes,
+        getInstructionAfter,
+        getInstructionAt,
+        getInstructionBefore,
+        getUndefinedDataAfter,
+        getUndefinedDataAt,
+    )
+except ImportError:
+    pass
 import time
 import string
 
@@ -201,7 +219,8 @@ def define_code_and_functions(start_addr, end_addr):
             else:
                 invalid_functions.append(undefined_addr)
                 code_block_count += 1
-        except:
+        except Exception as e:
+            print("[!] define_code_and_functions: {}".format(e))
             continue
         finally:
             undefined_code = getUndefinedDataAfter(undefined_addr)

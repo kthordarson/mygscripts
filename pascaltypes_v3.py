@@ -1,5 +1,16 @@
+# Find Free Pascal functions and create VMT structures (v3)
 # @author kth
 # @category mygscripts
+try:
+    from ghidra.ghidra_builtins import (
+        createData,
+        currentProgram,
+        getFunctionAt,
+        getReferencesTo,
+        removeInstruction,
+    )
+except ImportError:
+    pass
 from ghidra.program.model.data import StructureDataType, PointerDataType, CategoryPath
 from ghidra.program.model.symbol import SymbolType
 from ghidra.program.model.data import DataTypeManager, DataType, StructureDataType, PointerDataType

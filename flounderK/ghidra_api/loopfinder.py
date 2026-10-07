@@ -572,8 +572,8 @@ class GraphPathHelper(object):
                 dominated = dominanceAlgorithm.getDominated(v)
                 return GraphAlgorithms.retainEdges(self.graph, dominated)
 
-        except:
-            pass
+        except Exception as e:
+            print("[!] findForwardScopedFlowAsync: {}".format(e))
             # handled below
 
         # use the empty set so we do not repeatedly attempt to calculate these paths
@@ -597,8 +597,8 @@ class GraphPathHelper(object):
                 # Set<V> dominated
                 dominated = postDominanceAlgorithm.getDominated(v)
                 return GraphAlgorithms.retainEdges(self.graph, dominated)
-        except:
-            pass
+        except Exception as e:
+            print("[!] findReverseScopedFlowAsync: {}".format(e))
             # handled below
 
         # use the empty set so we do not repeatedly attempt to calculate these paths

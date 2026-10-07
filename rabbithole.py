@@ -1,10 +1,19 @@
 # Mark functions with their cumulative cyclomatic complexity
-#@author buherator
-#@category _NEW_
+# original author: buherator
+# @author kth
+# @category mygscripts
 #@keybinding 
 #@menupath 
 #@toolbar 
 
+try:
+    from ghidra.ghidra_builtins import (
+        createTableChooserDialog,
+        getFirstFunction,
+        getFunctionAfter,
+    )
+except ImportError:
+    pass
 from ghidra.program.util import CyclomaticComplexity
 from ghidra.util.task import TaskMonitor
 from ghidra.program.model.symbol import SourceType

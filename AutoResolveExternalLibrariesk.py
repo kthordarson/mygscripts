@@ -13,8 +13,16 @@
 # picks the alphabetically-last one and reports all candidates so you can
 # override manually if it picked the wrong one.
 #
-# @category ImportUtils
+# @author kth
+# @category mygscripts
 
+try:
+    from ghidra.ghidra_builtins import (
+        currentProgram,
+        state,
+    )
+except ImportError:
+    pass
 UNKNOWN_LIBRARY_NAME = "<EXTERNAL>"
 
 

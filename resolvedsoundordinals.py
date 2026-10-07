@@ -1,5 +1,13 @@
+# Resolve dsound.dll Ordinal_N imports to function names
 # @author kth
 # @category mygscripts
+try:
+	from ghidra.ghidra_builtins import (
+		currentProgram,
+		getCurrentProgram,
+	)
+except ImportError:
+	pass
 from ghidra.program.model.symbol import SymbolTable, Symbol, SourceType, SymbolType
 from ghidra.util.task import TaskMonitor
 from ghidra.program.model.listing import FunctionManager

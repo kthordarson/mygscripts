@@ -11,9 +11,18 @@
 # and is NOT itself a thunk to an external location - otherwise every
 # library's own PLT stubs for common libc calls (strcmp, memcpy, ...) would
 # falsely look like they "define" those names too.
+# @author kth
+# @category mygscripts
 #
-# @category ImportUtils
 
+try:
+    from ghidra.ghidra_builtins import (
+        currentProgram,
+        monitor,
+        state,
+    )
+except ImportError:
+    pass
 UNKNOWN_LIBRARY_NAME = "<EXTERNAL>"
 
 

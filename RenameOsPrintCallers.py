@@ -1,7 +1,18 @@
 # Find functions named FUN_* that call os_print_write, and rename them
 # using the tag string passed as the 5th argument (module/function name).
-#@category GhidrAssist
+# @author kth
+# @category mygscripts
 
+try:
+	from ghidra.ghidra_builtins import (
+		currentProgram,
+		getByte,
+		getFunctionContaining,
+		println,
+		toAddr,
+	)
+except ImportError:
+	pass
 from ghidra.app.decompiler import DecompInterface
 from ghidra.program.model.pcode import PcodeOp
 from ghidra.program.model.symbol import SourceType

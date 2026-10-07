@@ -1,9 +1,19 @@
+# Rename convertOrThrowBasedOnMode and its locals
 # @author kth
 # @category mygscripts
 # @keybinding 
 # @menupath 
 # @toolbar 
 
+try:
+    from ghidra.ghidra_builtins import (
+        currentProgram,
+        getFunctionAt,
+        monitor,
+        toAddr,
+    )
+except ImportError:
+    pass
 from ghidra.program.model.symbol import SourceType
 from ghidra.app.decompiler import DecompInterface
 from ghidra.program.model.symbol import SymbolTable

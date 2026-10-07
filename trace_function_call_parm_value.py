@@ -1,9 +1,25 @@
 # Trace function call parameters value using Ghidra P-Code.
-# @author dark-lbp
-# @category
+# original author: dark-lbp
+# @author kth
+# @category mygscripts
 # @keybinding
 # @menupath
 # @toolbar
+try:
+    from ghidra.ghidra_builtins import (
+        askLong,
+        currentProgram,
+        getDataAt,
+        getFunctionAt,
+        getFunctionContaining,
+        getInstructionAt,
+        getInt,
+        getMonitor,
+        getReferencesTo,
+        toAddr,
+    )
+except ImportError:
+    pass
 from ghidra.app.decompiler import DecompInterface, DecompileOptions, DecompileResults
 from ghidra.program.model.pcode import HighParam, PcodeOp, PcodeOpAST
 from ghidra.program.model.address import GenericAddress
@@ -179,7 +195,8 @@ def calc_pcode_op(pcode):
                 logger.debug("Got something wrong with calc PcodeOp.PTRADD : {}".format(err))
                 return None
 
-            except:
+            except Exception as e:
+                print("[!] calc_pcode_op: {}".format(e))
                 logger.error("Got something wrong with calc PcodeOp.PTRADD ")
                 return None
 
@@ -247,7 +264,8 @@ class FunctionAnalyzer(object):
             try:
                 ops = self.hfunction.getPcodeOps()
 
-            except:
+            except Exception as e:
+                print("[!] get_function_pcode: {}".format(e))
                 return None
 
             return ops

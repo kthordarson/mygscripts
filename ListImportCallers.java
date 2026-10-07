@@ -1,5 +1,6 @@
 // Lists imported symbols and all internal functions that call their import thunks.
-//@category Analysis
+// @author kth
+// @category mygscripts
 import ghidra.app.script.GhidraScript;
 import ghidra.program.model.address.*;
 import ghidra.program.model.listing.*;

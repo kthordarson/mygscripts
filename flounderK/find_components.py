@@ -50,7 +50,6 @@
 #   names=N      show at most N names per line
 
 
-
 try:
     from ghidra.ghidra_builtins import (
         currentProgram,
@@ -74,16 +73,40 @@ log.setLevel(logging.INFO)
 
 
 def parse_args(args):
-    options = {"min_size": 2, "soft": [], "ignore": [], "stdlib": True,
-               "externals": False, "datarefs": False, "post": False,
-               "suggest": False, "tree": False, "tag": False, "graph": False,
-               "dot": None, "out": None, "shared": True, "groups": True,
-               "names": None, "hubs": None, "tables": 0, "roots": None,
-               "mkfuncs": False}
+    options = {
+        "min_size": 2,
+        "soft": [],
+        "ignore": [],
+        "stdlib": True,
+        "externals": False,
+        "datarefs": False,
+        "post": False,
+        "suggest": False,
+        "tree": False,
+        "tag": False,
+        "graph": False,
+        "dot": None,
+        "out": None,
+        "shared": True,
+        "groups": True,
+        "names": None,
+        "hubs": None,
+        "tables": 0,
+        "roots": None,
+        "mkfuncs": False,
+    }
     for arg in args:
         arg = str(arg)
-        if arg in ("externals", "datarefs", "post", "suggest", "tree", "tag",
-                   "graph", "mkfuncs"):
+        if arg in (
+            "externals",
+            "datarefs",
+            "post",
+            "suggest",
+            "tree",
+            "tag",
+            "graph",
+            "mkfuncs",
+        ):
             options[arg] = True
         elif arg == "nostdlib":
             options["stdlib"] = False
@@ -101,8 +124,11 @@ def parse_args(args):
             options["tables"] = int(arg.split("=", 1)[1], 0)
         elif arg.startswith("roots="):
             value = arg.split("=", 1)[1]
-            options["roots"] = (cu.ENTRY_ROOTS if value == cu.ENTRY_ROOTS
-                                else [r for r in value.split(",") if r])
+            options["roots"] = (
+                cu.ENTRY_ROOTS
+                if value == cu.ENTRY_ROOTS
+                else [r for r in value.split(",") if r]
+            )
         elif arg.startswith("soft=") or arg.startswith("ignore="):
             key, value = arg.split("=", 1)
             for item in value.split(","):
@@ -141,14 +167,19 @@ def show_graph(clustering):
         return
     from ghidra.app.services import GraphDisplayBroker
     from ghidra.service.graph import EmptyGraphType, GraphDisplayOptions
+
     broker = tool.getService(GraphDisplayBroker)
     if broker is None:
         log.warning("no graph display service is available")
         return
     display = broker.getDefaultGraphDisplay(False, monitor)
-    display.setGraph(cu.component_graph(clustering),
-                     GraphDisplayOptions(EmptyGraphType()), "Components", False,
-                     monitor)
+    display.setGraph(
+        cu.component_graph(clustering),
+        GraphDisplayOptions(EmptyGraphType()),
+        "Components",
+        False,
+        monitor,
+    )
 
 
 def main():
@@ -161,24 +192,43 @@ def main():
         log.warning("mkfuncs does nothing without tables=N or datarefs")
 
     call_graph = cu.build_call_graph(
-        program=currentProgram, soft_leaves=soft, ignored=options["ignore"],
-        functions=selected_functions(), include_externals=options["externals"],
-        include_data_refs=options["datarefs"], table_depth=options["tables"],
-        create_table_functions=options["mkfuncs"], roots=options["roots"],
-        monitor=monitor)
-    log.info("call graph: %d functions, %d soft leaves, %d unreachable dropped, "
-             "%d created from tables", len(call_graph),
-             len(call_graph.soft_leaves()), len(call_graph.unreachable),
-             len(call_graph.created))
+        program=currentProgram,
+        soft_leaves=soft,
+        ignored=options["ignore"],
+        functions=selected_functions(),
+        include_externals=options["externals"],
+        include_data_refs=options["datarefs"],
+        table_depth=options["tables"],
+        create_table_functions=options["mkfuncs"],
+        roots=options["roots"],
+        monitor=monitor,
+    )
+    log.info(
+        "call graph: %d functions, %d soft leaves, %d unreachable dropped, "
+        "%d created from tables",
+        len(call_graph),
+        len(call_graph.soft_leaves()),
+        len(call_graph.unreachable),
+        len(call_graph.created),
+    )
 
-    tree = (cu.post_dominator_tree(call_graph, monitor) if options["post"]
-            else cu.dominator_tree(call_graph, monitor))
-    clustering = cu.find_components(call_graph, min_size=options["min_size"],
-                                    tree=tree, hub_callers=options["hubs"])
+    tree = (
+        cu.post_dominator_tree(call_graph, monitor)
+        if options["post"]
+        else cu.dominator_tree(call_graph, monitor)
+    )
+    clustering = cu.find_components(
+        call_graph, min_size=options["min_size"], tree=tree, hub_callers=options["hubs"]
+    )
 
-    lines = [cu.format_report(clustering, show_shared=options["shared"],
-                              show_groups=options["groups"],
-                              max_names=options["names"])]
+    lines = [
+        cu.format_report(
+            clustering,
+            show_shared=options["shared"],
+            show_groups=options["groups"],
+            max_names=options["names"],
+        )
+    ]
     if options["suggest"]:
         lines.append("")
         lines.append("soft leaf candidates (callers, components calling):")

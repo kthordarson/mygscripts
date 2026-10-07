@@ -1,5 +1,12 @@
+# Atomic Bomberman: rename DAT_ globals from an address->name map
 # @author kth
 # @category mygscripts
+try:
+    from ghidra.ghidra_builtins import (
+        currentProgram,
+    )
+except ImportError:
+    pass
 from ghidra.program.model.symbol import SourceType
 from ghidra.program.model.listing import Program
 from ghidra.util.task import TaskMonitor

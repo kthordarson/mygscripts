@@ -10,6 +10,12 @@
 # @author kth
 # @category mygscripts
 
+try:
+    from ghidra.ghidra_builtins import (
+        currentProgram,
+    )
+except ImportError:
+    pass
 from collections import defaultdict
 from ghidra.app.decompiler import DecompileOptions
 from ghidra.app.decompiler import DecompInterface

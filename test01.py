@@ -1,4 +1,15 @@
 #script for https://www.youtube.com/watch?v=FvH7b_qLmbU
+# @author kth
+# @category mygscripts
+try:
+	from ghidra.ghidra_builtins import (
+		createDWord,
+		currentAddress,
+		currentProgram,
+		getBytes,
+	)
+except ImportError:
+	pass
 import struct
 from  ghidra.program.model.symbol import *
 

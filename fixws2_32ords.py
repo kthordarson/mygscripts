@@ -1,6 +1,13 @@
+# Rename ws2_32 Ordinal_N symbols to Winsock function names
 # @author kth
 # @category mygscripts
 
+try:
+    from ghidra.ghidra_builtins import (
+        getCurrentProgram,
+    )
+except ImportError:
+    pass
 from ghidra.program.model.symbol import SymbolType
 from ghidra.program.model.symbol import SourceType
 

@@ -1,11 +1,11 @@
-# @author kth
-# @category mygscripts
 # Attempts to more aggressively demangle any Microsoft-style mangled symbols.
 # DemanglerCmd is not used as it will filter by program format (e.g. Microsoft
 # Demangler will not be used if the executable format is not PE/COFF). Instead,
 # this script invokes the MicrosoftDemangler directly on any symbol prefixed by
 # `?`. Additionally, this script handles `@name@X` (fastcall) and `_name@X`
 # (stdcall) mangles.
+# @author kth
+# @category mygscripts
 try:
 	from ghidra.ghidra_builtins import (
 		createTableChooserDialog,

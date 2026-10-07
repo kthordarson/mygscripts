@@ -1,5 +1,14 @@
+# Find Free Pascal functions and VMT tables (v2)
 # @author kth
 # @category mygscripts
+try:
+    from ghidra.ghidra_builtins import (
+        currentProgram,
+        getFunctionAt,
+        getReferencesTo,
+    )
+except ImportError:
+    pass
 from ghidra.program.model.symbol import SymbolType
 from ghidra.program.model.data import StructureDataType, PointerDataType, CategoryPath
 from ghidra.program.model.listing import CodeUnit

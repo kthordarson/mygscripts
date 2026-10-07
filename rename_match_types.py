@@ -1,3 +1,4 @@
+# Find SendMessageA callers and rename variables/match types in code text
 # @author kth
 # @category mygscripts
 import re

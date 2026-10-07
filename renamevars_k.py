@@ -1,12 +1,19 @@
-# @author kth
-# @category mygscripts
 # Script requests current variable name and desired new name.
 # It then iterates through all functions, renaming the variable.
+# @author kth
+# @category mygscripts
 #
 # Note: Script does not verify that no other variable within the
 #       function is already using the new name.
 #
 
+try:
+	from ghidra.ghidra_builtins import (
+		currentProgram,
+		monitor,
+	)
+except ImportError:
+	pass
 from ghidra.app.script import GhidraScript
 from ghidra.program.model.symbol import SourceType
 from ghidra.framework.model import DomainFile
@@ -22,7 +29,7 @@ from ghidra.util.exception import CancelledException
 
 def rename_variable():
 	# Get current variable name
-	cur_name = 'param_2'  #  askString("Current variable name", "Current Name")
+	cur_name = 'param_2'  # askString("Current variable name", "Current Name")
 	if cur_name is None:
 		return
 

@@ -1,9 +1,17 @@
 # Find MIPS ROP gadgets that contain a user specified instruction.
-#@author fuzzywalls
-#@category TNS
+# original author: fuzzywalls
+# @author kth
+# @category mygscripts
 #@menupath TNS.Mips Rops.Gadgets.Find
 
 
+try:
+    from ghidra.ghidra_builtins import (
+        askString,
+        currentProgram,
+    )
+except ImportError:
+    pass
 import re
 from utils import mipsrop, utils
 

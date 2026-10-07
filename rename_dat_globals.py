@@ -1,12 +1,21 @@
-
+# @description Rename DAT_* globals using access pattern heuristics
 # @category mygscripts
 # @author kth
-# @description Rename DAT_* globals using access pattern heuristics
 
+try:
+    from ghidra.ghidra_builtins import (
+        currentProgram,
+    )
+except ImportError:
+    pass
 from ghidra.program.model.symbol import SymbolType, SourceType
 from ghidra.program.model.data import (
-    ByteDataType, WordDataType, DWordDataType, QWordDataType,
-    PointerDataType, ArrayDataType
+    ByteDataType,
+    WordDataType,
+    DWordDataType,
+    QWordDataType,
+    PointerDataType,
+    ArrayDataType,
 )
 from ghidra.program.model.listing import CodeUnit
 from ghidra.util import Msg
@@ -16,6 +25,7 @@ symbolTable = program.getSymbolTable()
 listing = program.getListing()
 refManager = program.getReferenceManager()
 dataTypeManager = program.getDataTypeManager()
+
 
 def infer_type_and_name(symbol):
     addr = symbol.getAddress()
@@ -47,8 +57,8 @@ def infer_type_and_name(symbol):
         # Operand size
         try:
             sizes.add(instr.getDefaultOperandRepresentation(0))
-        except:
-            pass
+        except Exception as e:
+            print("[!] infer_type_and_name: {}".format(e))
 
         # Indexed access → array/buffer
         if "[" in instr.toString():
@@ -74,21 +84,25 @@ def infer_type_and_name(symbol):
 
     return new_name, dtype
 
+
 def apply_changes(symbol, new_name, dtype):
     addr = symbol.getAddress()
 
     # Rename
     try:
         symbol.setName(new_name, SourceType.USER_DEFINED)
-    except:
+    except Exception as e:
+        print("[!] apply_changes: {}".format(e))
         Msg.warn(None, "Rename failed for %s" % symbol.getName())
 
     # Apply data type
     try:
         listing.clearCodeUnits(addr, addr.add(dtype.getLength() - 1), False)
         listing.createData(addr, dtype)
-    except:
+    except Exception as ex:
+        print("[!] apply_changes: {}".format(ex))
         Msg.warn(None, "Type apply failed for %s" % new_name)
+
 
 def main():
     symbols = symbolTable.getAllSymbols(True)
@@ -107,5 +121,6 @@ def main():
         count += 1
 
     Msg.info(None, "Renamed %d DAT_ symbols" % count)
+
 
 main()

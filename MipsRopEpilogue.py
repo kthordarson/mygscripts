@@ -1,9 +1,17 @@
 # Find MIPS ROP gadgets for gaining control of more registers through function epilogues.
-#@author fuzzywalls
-#@category TNS
+# original author: fuzzywalls
+# @author kth
+# @category mygscripts
 #@menupath TNS.Mips Rops.Gadgets.Epilogue
 
 
+try:
+    from ghidra.ghidra_builtins import (
+        askChoice,
+        currentProgram,
+    )
+except ImportError:
+    pass
 from utils import mipsrop, utils
 
 utils.allowed_processors(currentProgram, 'MIPS')

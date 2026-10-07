@@ -1,8 +1,22 @@
 # Find calls to a function and display source of parameters.
-#@author fuzzywalls
-#@category TNS
+# original author: fuzzywalls
+# @author kth
+# @category mygscripts
 #@menupath TNS.Operator
 
+try:
+    from ghidra.ghidra_builtins import (
+        askChoice,
+        currentProgram,
+        getDataAt,
+        getFunctionAt,
+        getFunctionContaining,
+        getInstructionAt,
+        getMonitor,
+        getReferencesFrom,
+    )
+except ImportError:
+    pass
 from utils import utils
 
 from ghidra.program.model.symbol import RefType

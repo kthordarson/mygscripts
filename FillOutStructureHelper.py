@@ -1,3 +1,4 @@
+# Helper for filling out structure fields from references
 # @author kth
 # @category mygscripts
 try:

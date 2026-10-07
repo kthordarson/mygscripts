@@ -1,3 +1,4 @@
+# Create thunks and apply signatures for MSI.DLL imports
 # @author kth
 # @category mygscripts
 try:

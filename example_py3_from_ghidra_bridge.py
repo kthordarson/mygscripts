@@ -1,6 +1,7 @@
 # Example script that demonstrates running a python3 (or technically, py2 should work) script outside the Ghidra interpreter, to use networkx to graph a function. Requires networkx installed in the external environment.
-# @author justfoxing
-# @category Examples
+# original author: justfoxing
+# @author kth
+# @category mygscripts
 
 import argparse
 

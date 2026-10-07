@@ -1,13 +1,23 @@
 # from https://github.com/Bigdrea6/winapi-ghidra
-#The equation is set automatically.
-#However, only four APIs are supported: SHGetSpecialFolderPathA, RegCreateKeyExA, RegSetValueExA, and CreateProcessA.
-#This is a prototype. I plan to develop it.
+# The equation is set automatically.
+# However, only four APIs are supported: SHGetSpecialFolderPathA, RegCreateKeyExA, RegSetValueExA, and CreateProcessA.
+# This is a prototype. I plan to develop it.
 # @author kth
 # @category mygscripts
 
-from ghidra.app.decompiler import DecompInterface
+try:
+    from ghidra.ghidra_builtins import (
+        currentProgram,
+        getFunctionContaining,
+    )
+except ImportError:
+    from ghidra.app.decompiler import DecompInterface
+except ImportError:
+    pass
+from ghidra.util.exception import CancelledException
 from ghidra.program.model.pcode import PcodeOp, DynamicHash
-#from ghidra.program.model.symbol.Equate import addReference
+
+# from ghidra.program.model.symbol.Equate import addReference
 import json
 
 decompiler = DecompInterface()
@@ -15,14 +25,18 @@ decompiler.openProgram(currentProgram())
 
 api_dict = {}
 
+
 def set_equate(vnode, equate):
-    if currentProgram().getEquateTable().getEquate(equate) == None:
-        new_eq = currentProgram().getEquateTable().createEquate(equate, vnode.getOffset())
+    if currentProgram().getEquateTable().getEquate(equate) is None:
+        new_eq = (
+            currentProgram().getEquateTable().createEquate(equate, vnode.getOffset())
+        )
     else:
         new_eq = currentProgram().getEquateTable().getEquate(equate)
 
     dynamic_hash = DynamicHash(vnode, 0)
     new_eq.addReference(dynamic_hash.getHash(), dynamic_hash.getAddress())
+
 
 def confirm_argument(addr, api):
     constant_subscripts = []
@@ -33,7 +47,7 @@ def confirm_argument(addr, api):
 
     for hpcode in hfunc.getPcodeOps(addr):
         if hpcode.getOpcode() == PcodeOp.CALL:
-            target_subscripts = api_dict[api]['target_subscript']
+            target_subscripts = api_dict[api]["target_subscript"]
 
             for subscript in target_subscripts:
                 vnode = hpcode.getInput(subscript)
@@ -48,8 +62,11 @@ def confirm_argument(addr, api):
 
     print("[+]{} {} {}".format(api, constant_subscripts, equates))
 
+
 def make_table():
-    for externalReference in currentProgram().getReferenceManager().getExternalReferences():
+    for externalReference in (
+        currentProgram().getReferenceManager().getExternalReferences()
+    ):
         if externalReference.getReferenceType().isCall():
             call_addr = externalReference.getFromAddress()
             api = externalReference.getExternalLocation().getLabel()
@@ -57,17 +74,19 @@ def make_table():
             if api in api_dict:
                 confirm_argument(call_addr, api)
 
+
 def load_dict():
     global api_dict
     try:
         # dataset = askFile("Choose dataset:", "Set").toString()
-        dataset = '/home/kth/ghidra_scripts/winapi-ghidra/api_dict.json'
-        with open(dataset, 'r') as f:
+        dataset = "/home/kth/ghidra_scripts/winapi-ghidra/api_dict.json"
+        with open(dataset, "r") as f:
             api_dict = json.load(f)
         print("[+]Loaded File")
-    except ghidra.util.exception.CancelledException:
+    except CancelledException:
         print("[!]Cancelled")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     load_dict()
     make_table()

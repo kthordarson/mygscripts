@@ -1,7 +1,13 @@
-# @author kth
-# @category mygscripts
 # Who reference this function( (target_function_name)
 # Import libraries from Ghidra that will be available to use.
+# @author kth
+# @category mygscripts
+try:
+    from ghidra.ghidra_builtins import (
+        getCurrentProgram,
+    )
+except ImportError:
+    pass
 from ghidra.util.task import ConsoleTaskMonitor
 from ghidra.program.model.symbol import RefType
 from ghidra.program.model.symbol import SymbolUtilities

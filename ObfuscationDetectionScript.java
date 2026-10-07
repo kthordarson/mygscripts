@@ -1,6 +1,7 @@
 //Collection of simple heuristics that can detect obfuscated code
-//@author Spiros
-//@category Analysis
+// original author: Spiros
+// @author kth
+// @category mygscripts
 //@keybinding
 //@menupath
 //@toolbar

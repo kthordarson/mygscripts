@@ -1,5 +1,13 @@
 #Retype ai_remote_player_avoid_danger param to GamePlayer* now that struct is 0x98
-#@category BM
+# @author kth
+# @category mygscripts
+try:
+    from ghidra.ghidra_builtins import (
+        currentProgram,
+        toAddr,
+    )
+except ImportError:
+    pass
 from ghidra.program.model.data import PointerDataType
 from ghidra.program.model.symbol import SourceType
 from java.util import ArrayList

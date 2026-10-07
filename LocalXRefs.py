@@ -1,10 +1,18 @@
 #Find local references to selected registers and local variables in the current function.
-#@author fuzzywalls
-#@category TNS
+# original author: fuzzywalls
+# @author kth
+# @category mygscripts
 #@keybinding 
 #@menupath TNS.Local X-Refs
 
 
+try:
+    from ghidra.ghidra_builtins import (
+        currentLocation,
+        currentProgram,
+    )
+except ImportError:
+    pass
 import re
 from ghidra.program.model.listing import CodeUnit
 

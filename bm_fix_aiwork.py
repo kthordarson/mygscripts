@@ -1,9 +1,25 @@
-#Define AiWorkEntry (0x44) and retype g_currentRemotePlayer / g_aiWorkBuffer
-#@category BM
-from ghidra.program.model.data import (StructureDataType, ShortDataType, CategoryPath,
-    PointerDataType, ArrayDataType)
+# Define AiWorkEntry (0x44) and retype g_currentRemotePlayer / g_aiWorkBuffer
+# @author kth
+# @category mygscripts
+try:
+    from ghidra.ghidra_builtins import (
+        clearListing,
+        createData,
+        currentProgram,
+        getDataAt,
+    )
+except ImportError:
+    pass
+from ghidra.program.model.data import (
+    StructureDataType,
+    ShortDataType,
+    CategoryPath,
+    PointerDataType,
+    ArrayDataType,
+)
 from ghidra.program.model.symbol import SourceType
 from java.util import ArrayList
+
 US = SourceType.USER_DEFINED
 prog = currentProgram
 dtm = prog.getDataTypeManager()
@@ -15,27 +31,31 @@ rep = []
 awe = StructureDataType(CategoryPath("/Copilot"), "AiWorkEntry", 0x44, dtm)
 fields = [
     (0x00, "personality", "0 = default personality callback list"),
-    (0x02, "pathActive",  "1 = currently pathing to a target tile"),
-    (0x04, "targetCol",   None),
-    (0x06, "targetRow",   None),
-    (0x08, "targetCost",  "cached board-overlay value of target tile"),
-    (0x28, "subTileX",    "pixel_x_to_tile_center_offset"),
-    (0x2a, "subTileY",    "pixel_y_to_tile_bottom_offset"),
-    (0x2c, "dirOffsetX",  "direction-rotated sub-tile offset"),
-    (0x2e, "dirOffsetY",  None),
-    (0x30, "curTileCol",  "current tile column"),
-    (0x32, "curTileRow",  "current tile row"),
+    (0x02, "pathActive", "1 = currently pathing to a target tile"),
+    (0x04, "targetCol", None),
+    (0x06, "targetRow", None),
+    (0x08, "targetCost", "cached board-overlay value of target tile"),
+    (0x28, "subTileX", "pixel_x_to_tile_center_offset"),
+    (0x2A, "subTileY", "pixel_y_to_tile_bottom_offset"),
+    (0x2C, "dirOffsetX", "direction-rotated sub-tile offset"),
+    (0x2E, "dirOffsetY", None),
+    (0x30, "curTileCol", "current tile column"),
+    (0x32, "curTileRow", "current tile row"),
 ]
 for off, nm, cmt in fields:
-    try: awe.replaceAtOffset(off, SHORT, 2, nm, cmt)
-    except Exception as e: rep.append("ERR field %s@%#x : %s" % (nm, off, str(e)))
+    try:
+        awe.replaceAtOffset(off, SHORT, 2, nm, cmt)
+    except Exception as e:
+        rep.append("ERR field %s@%#x : %s" % (nm, off, str(e)))
 
 # resolve/add into the program's DTM
-al = ArrayList(); dtm.findDataTypes("AiWorkEntry", al)
+al = ArrayList()
+dtm.findDataTypes("AiWorkEntry", al)
 if al.size() > 0:
     existing = al.get(0)
     try:
-        existing.replaceWith(awe); awe = existing
+        existing.replaceWith(awe)
+        awe = existing
         rep.append("AiWorkEntry replaced (size 0x%x)" % awe.getLength())
     except Exception as e:
         rep.append("ERR replaceWith : %s" % str(e))
@@ -45,10 +65,12 @@ else:
 
 AWEP = PointerDataType(awe)
 
+
 # 2) retype g_currentRemotePlayer -> AiWorkEntry*
 def sym_addr(name):
     it = st.getGlobalSymbols(name)
     return it[0].getAddress() if len(it) > 0 else None
+
 
 a = sym_addr("g_currentRemotePlayer")
 if a is not None:

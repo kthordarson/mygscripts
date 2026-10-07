@@ -1,4 +1,6 @@
-
+// Auto-create/fill out structures for pointer-typed variables across all functions
+// @author kth
+// @category mygscripts
 import ghidra.app.plugin.core.decompile.actions.FillOutStructureCmd;
 import ghidra.app.plugin.core.decompile.actions.FillOutStructureCmd.OffsetPcodeOpPair;
 import ghidra.app.script.*;
@@ -58,82 +60,87 @@ import ghidra.program.util.*;
 import ghidra.util.*;
 import ghidra.util.exception.CancelledException;
 import ghidra.util.exception.InvalidInputException;
+
 public class CreateStructure extends GhidraScript {
 
 	@Override
 	public void run() throws Exception {
-		/*println("" + currentLocation.toString());
-		FillOutStructureCmd fillCmd =
-				new FillOutStructureCmd(currentProgram, currentLocation, state.getTool());
-		fillCmd.applyTo(currentProgram, this.monitor);*/
+		/*
+		 * println("" + currentLocation.toString());
+		 * FillOutStructureCmd fillCmd =
+		 * new FillOutStructureCmd(currentProgram, currentLocation, state.getTool());
+		 * fillCmd.applyTo(currentProgram, this.monitor);
+		 */
 		FunctionIterator funcs = currentProgram().getFunctionManager().getFunctions(true);
 		DecompInterface decomp = setUpDecompiler(currentProgram);
 		for (Function fn : funcs) {
 			Variable[] allvars = fn.getAllVariables();
-			for(Variable var : allvars) {
-				/*DecompileResults res = decomp.decompileFunction(fn, 10000, monitor);
-				ClangNode nodres = null;
-				ClangTokenGroup ccode = res.getCCodeMarkup();
-				println("Decompiled " + fn.getName());
-				ClangToken tokeres = new ClangToken((ClangNode) var.getVariableStorage().getFirstVarnode());
-				*/
+			for (Variable var : allvars) {
+				/*
+				 * DecompileResults res = decomp.decompileFunction(fn, 10000, monitor);
+				 * ClangNode nodres = null;
+				 * ClangTokenGroup ccode = res.getCCodeMarkup();
+				 * println("Decompiled " + fn.getName());
+				 * ClangToken tokeres = new ClangToken((ClangNode)
+				 * var.getVariableStorage().getFirstVarnode());
+				 */
 				DataType dattyp = var.getDataType();
 				String datatypstring = dattyp.getDisplayName();
-				if(!datatypstring.contains("*")) continue;
+				if (!datatypstring.contains("*"))
+					continue;
 				datatypstring = datatypstring.replaceAll("\\[|\\]|\\*|\\s", "");
-		        //println(datatypstring = datatypstring.replaceAll("\\[|\\]|\\*|\\s", ""));
-		        DecompileResults res = decomp.decompileFunction(fn, 10000, monitor);
-		        
-		        //println("type : " + dattyp.getCategoryPath().getName());
-		        
-		        if(!dattyp.getCategoryPath().getName().equals("Demangler")) {
-		        	continue;
-		        }
-		        
-		        ClangTokenGroup tokengrp = res.getCCodeMarkup();
-		        
-		        if(tokengrp == null) continue;
-		        
-		        ClangToken tokeres = null;
-		        
-		        //println("searching for " + datatypstring);
-		        
-		        mainloop:
-		        for(ClangNode  token : tokengrp) {
-		        	if(token instanceof ClangFuncProto) {
-		        		for(ClangNode  outter : ((ClangFuncProto)token)) {
-		        			if(outter instanceof ClangVariableDecl)
-		        			for(ClangNode inner2 : ((ClangVariableDecl)outter)) {
-			        			if(inner2 instanceof ClangToken) {
-			        				if(((ClangToken)inner2).getText().equals(datatypstring)) {
-						        		tokeres = (ClangToken)inner2;
-						        		//println(inner2.getClass().toString());
-						        		break mainloop;
-						        	}
-				        			else {
-				        				//println("" + ((ClangToken)inner2).getText());
-				        			}
-			        			}
-			        			else {
-			        				//println(inner2.getClass().toString());
-			        			}
-		        			}
-		        	}
-		        }
-		        }
-		        if(tokeres == null) continue;
-		        //println("found");
-		        
-				//ClangToken tokeres = new ClangToken(null, datatypstring);
-				DecompilerLocation loc = new DecompilerLocation(currentProgram, fn.getEntryPoint(), fn.getEntryPoint(), res, tokeres,1,1);
+				// println(datatypstring = datatypstring.replaceAll("\\[|\\]|\\*|\\s", ""));
+				DecompileResults res = decomp.decompileFunction(fn, 10000, monitor);
+
+				// println("type : " + dattyp.getCategoryPath().getName());
+
+				if (!dattyp.getCategoryPath().getName().equals("Demangler")) {
+					continue;
+				}
+
+				ClangTokenGroup tokengrp = res.getCCodeMarkup();
+
+				if (tokengrp == null)
+					continue;
+
+				ClangToken tokeres = null;
+
+				// println("searching for " + datatypstring);
+
+				mainloop: for (ClangNode token : tokengrp) {
+					if (token instanceof ClangFuncProto) {
+						for (ClangNode outter : ((ClangFuncProto) token)) {
+							if (outter instanceof ClangVariableDecl)
+								for (ClangNode inner2 : ((ClangVariableDecl) outter)) {
+									if (inner2 instanceof ClangToken) {
+										if (((ClangToken) inner2).getText().equals(datatypstring)) {
+											tokeres = (ClangToken) inner2;
+											// println(inner2.getClass().toString());
+											break mainloop;
+										} else {
+											// println("" + ((ClangToken)inner2).getText());
+										}
+									} else {
+										// println(inner2.getClass().toString());
+									}
+								}
+						}
+					}
+				}
+				if (tokeres == null)
+					continue;
+				// println("found");
+
+				// ClangToken tokeres = new ClangToken(null, datatypstring);
+				DecompilerLocation loc = new DecompilerLocation(currentProgram, fn.getEntryPoint(), fn.getEntryPoint(),
+						res, tokeres, 1, 1);
 				println("" + loc);
-				FillOutStructureCmd fillCmd =
-						new FillOutStructureCmd(currentProgram, loc, state.getTool());
+				FillOutStructureCmd fillCmd = new FillOutStructureCmd(currentProgram, loc, state.getTool());
 				fillCmd.applyTo(currentProgram, this.monitor);
 			}
 		}
 	}
-	
+
 	private DecompInterface setUpDecompiler(Program program) {
 		DecompInterface decompInterface = new DecompInterface();
 

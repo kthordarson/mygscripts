@@ -1,6 +1,6 @@
-
 // Rename FUN_* callers using os_print_write's source-function-name argument.
-//@category ReverseEngineering
+// @author kth
+// @category mygscripts
 import ghidra.app.script.GhidraScript;
 import ghidra.app.decompiler.*;
 import ghidra.program.model.address.*;

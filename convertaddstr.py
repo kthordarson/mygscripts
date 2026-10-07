@@ -1,8 +1,16 @@
-# @author kth
-# @category mygscripts
 # Ghidra script: Convert all ASCII regions to strings automatically
 # This will scan the entire memory and convert any printable sequences into strings.
+# @author kth
+# @category mygscripts
 
+try:
+    from ghidra.ghidra_builtins import (
+        createAsciiString,
+        currentProgram,
+        getBytes,
+    )
+except ImportError:
+    pass
 from ghidra.program.model.address import Address
 from ghidra.program.model.symbol import SourceType
 from ghidra.program.model.data import DataTypeConflictHandler
@@ -12,7 +20,8 @@ def is_printable_ascii(byte_array):
     try:
         text = byte_array.decode('ascii')
         return all(c in string.printable for c in text)
-    except:
+    except Exception as e:
+        print("[!] is_printable_ascii: {}".format(e))
         return False
 
 memory = currentProgram.getMemory()
@@ -42,8 +51,8 @@ for block in memory.getBlocks():
                     try:
                         createAsciiString(str_addr)
                         print("Created string at {}: {}".format(str_addr, str_text))
-                    except:
-                        pass
+                    except Exception as ex:
+                        print("[!] convertaddstr: {}".format(ex))
         addr = addr.add(length)
 
 print("String conversion completed.")

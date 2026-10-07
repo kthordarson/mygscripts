@@ -1,9 +1,16 @@
 # Identify potential POSIX functions in the current program such as strcpy, strcat, memcpy, atoi, strlen, etc.
-#@author fuzzywalls
-#@category TNS
+# original author: fuzzywalls
+# @author kth
+# @category mygscripts
 #@menupath TNS.Leaf Blower.Find leaf functions
 
 
+try:
+    from ghidra.ghidra_builtins import (
+        currentProgram,
+    )
+except ImportError:
+    pass
 from utils import leafblower
 
 print ('Searching for potential POSIX leaf functions...')

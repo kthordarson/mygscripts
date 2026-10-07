@@ -1,9 +1,16 @@
+# Rename WinAPI resolver cache and create function_id enum
 # @author kth
 # @category mygscripts
 # @keybinding
 # @menupath
 # @toolbar
 
+try:
+    from ghidra.ghidra_builtins import (
+        currentProgram,
+    )
+except ImportError:
+    pass
 from ghidra.program.model.symbol import SourceType
 from ghidra.program.model.data import EnumDataType
 

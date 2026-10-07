@@ -3,6 +3,12 @@
 # @author kth
 # @category mygscripts
 
+try:
+    from ghidra.ghidra_builtins import (
+        currentProgram,
+    )
+except ImportError:
+    pass
 from collections import Counter
 
 table = []

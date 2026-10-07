@@ -1,6 +1,12 @@
+# Find address tables and create functions at their targets
 # @author kth
 # @category mygscripts
-# Import necessary Ghidra classes
+try:
+    from ghidra.ghidra_builtins import (
+        currentProgram,
+    )
+except ImportError:
+    pass
 from ghidra.program.model.address import AddressSet
 from ghidra.util.task import ConsoleTaskMonitor
 from ghidra.program.model.symbol import Symbol

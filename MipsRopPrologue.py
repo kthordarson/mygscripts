@@ -1,9 +1,16 @@
 # Find MIPS ROP gadgets near the beginning of functions that allow for stack pointer movement.
-#@author fuzzywalls
-#@category TNS
+# original author: fuzzywalls
+# @author kth
+# @category mygscripts
 #@menupath TNS.Mips Rops.Gadgets.Prologue
 
 
+try:
+    from ghidra.ghidra_builtins import (
+        currentProgram,
+    )
+except ImportError:
+    pass
 from utils import mipsrop, utils
 
 utils.allowed_processors(currentProgram, 'MIPS')

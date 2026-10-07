@@ -1,10 +1,21 @@
 # The script iterates through all the functions collecting all available strings in the function, and then sign their like a comment.
-# @category: Strings
+# @author kth
+# @category mygscripts
 
 # import ghidra.app.script.GhidraScript
 #import ghidra.program.model.data.StringDataType as StringDataType
 #import exceptions
 
+try:
+    from ghidra.ghidra_builtins import (
+        getDataAt,
+        getFirstFunction,
+        getFunctionAfter,
+        getFunctionContaining,
+        getInstructionAt,
+    )
+except ImportError:
+    pass
 class Node:
     def __str__(self):
         raise NotImplementedError("Must sub-class")

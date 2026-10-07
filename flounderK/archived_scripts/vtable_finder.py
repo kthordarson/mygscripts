@@ -466,8 +466,8 @@ class VTableFinder:
             datatype = PointerDataType()
             try:
                 new_struct.replace(i*self.ptr_size, datatype, self.ptr_size)
-            except:
-                pass
+            except Exception as e:
+                print("[!] create_or_update_struct_from_found_vtable: {}".format(e))
             # new_struct.add(datatype, self.ptr_size)
         """
         self.dtm.addDataType(new_struct, None)

@@ -1,8 +1,17 @@
 # Display call chain graph between two functions and output to the console.
-#@author fuzzywalls
-#@category TNS
+# original author: fuzzywalls
+# @author kth
+# @category mygscripts
 #@menupath TNS.Call Chain
 
+try:
+    from ghidra.ghidra_builtins import (
+        askChoice,
+        currentProgram,
+        monitor,
+    )
+except ImportError:
+    pass
 import os
 import sys
 import tempfile

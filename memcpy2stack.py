@@ -1,3 +1,16 @@
+# Find memcpy calls that copy into stack buffers
+# @author kth
+# @category mygscripts
+try:
+    from ghidra.ghidra_builtins import (
+        currentProgram,
+        getFunctionContaining,
+        getReferencesTo,
+        getSymbols,
+        monitor,
+    )
+except ImportError:
+    pass
 from ghidra.app.decompiler import DecompInterface
 import re
 

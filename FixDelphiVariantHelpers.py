@@ -1,9 +1,17 @@
-#@author ReverseEngineer
-#@category Delphi
+# Define Delphi/OLE VARIANT types and fix signatures of VARIANT helper functions
+# original author: ReverseEngineer
+# @author kth
+# @category mygscripts
 #@keybinding
 #@menupath Tools.Delphi.Fix VARIANT Helpers
 #@toolbar
 
+try:
+    from ghidra.ghidra_builtins import (
+        currentProgram,
+    )
+except ImportError:
+    pass
 from ghidra.program.model.data import *
 from ghidra.program.model.symbol import *
 from ghidra.program.model.listing import *

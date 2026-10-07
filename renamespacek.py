@@ -1,6 +1,17 @@
 # Change namespace of selected regions
 # @author kth
 # @category mygscripts
+try:
+    from ghidra.ghidra_builtins import (
+        askString,
+        currentProgram,
+        currentSelection,
+        getBytes,
+        getFunctionAt,
+        toAddr,
+    )
+except ImportError:
+    pass
 import ghidra
 from ghidra.program.flatapi import FlatProgramAPI
 # from ghidra.python import PythonScript

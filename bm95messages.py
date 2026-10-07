@@ -1,5 +1,17 @@
+# Atomic Bomberman: bookmark message table entries from messages.txt
 # @author kth
 # @category mygscripts
+try:
+	from ghidra.ghidra_builtins import (
+		createData,
+		currentProgram,
+		getAddressFactory,
+		getDataAt,
+		getInt,
+		toAddr,
+	)
+except ImportError:
+	pass
 from ghidra.app.script import GhidraScript
 from ghidra.program.model.util import CodeUnitIterator
 from ghidra.program.model.symbol import SourceType

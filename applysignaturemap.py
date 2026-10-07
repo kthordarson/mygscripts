@@ -2,6 +2,12 @@
 # @author kth
 # @category mygscripts
 
+try:
+    from ghidra.ghidra_builtins import (
+        currentProgram,
+    )
+except ImportError:
+    pass
 import ghidra.app.script
 from ghidra.program.model.symbol import Symbol
 

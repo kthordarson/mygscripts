@@ -1,5 +1,13 @@
+# Rename functions/variables and set types from inline config (v3)
 # @author kth
 # @category mygscripts
+try:
+    from ghidra.ghidra_builtins import (
+        currentProgram,
+        getFunctionAt,
+    )
+except ImportError:
+    pass
 import ghidra
 from ghidra.program.model.symbol import SourceType
 from ghidra.program.model.data import StructureDataType, PointerDataType

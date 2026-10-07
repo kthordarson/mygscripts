@@ -1,3 +1,6 @@
+// Rename WSOCK32 ordinal imports to their Winsock function names
+// @author kth
+// @category mygscripts
 import ghidra.app.script.GhidraScript;
 import ghidra.program.model.symbol.*;
 import ghidra.program.model.listing.*;

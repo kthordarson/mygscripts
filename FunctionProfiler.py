@@ -1,8 +1,17 @@
 # Find all cross references in the current function.
-#@author fuzzywalls
-#@category TNS
+# original author: fuzzywalls
+# @author kth
+# @category mygscripts
 #@menupath TNS.Function Profiler
 
+try:
+    from ghidra.ghidra_builtins import (
+        currentLocation,
+        currentProgram,
+        getSymbolAt,
+    )
+except ImportError:
+    pass
 from ghidra.program.model.symbol import RefType,SymbolType
 
 def get_instruction_list(code_manager, function):

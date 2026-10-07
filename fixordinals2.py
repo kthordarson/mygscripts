@@ -1,5 +1,12 @@
+# Resolve Ordinal_N imports to names with parameter info (v2)
 # @author kth
 # @category mygscripts
+try:
+    from ghidra.ghidra_builtins import (
+        getCurrentProgram,
+    )
+except ImportError:
+    pass
 from ghidra.program.model.symbol import SourceType, SymbolType
 from ghidra.program.model.listing import Function
 from ghidra.app.util import NamespaceUtils

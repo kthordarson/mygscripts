@@ -1,8 +1,16 @@
-# @author kth
-# @category mygscripts
 # BatchDecompile.py
 # Decompile all functions in the current program and save them to a directory.
+# @author kth
+# @category mygscripts
 
+try:
+    from ghidra.ghidra_builtins import (
+        askDirectory,
+        currentProgram,
+        monitor,
+    )
+except ImportError:
+    pass
 from ghidra.app.decompiler import DecompInterface
 from ghidra.program.model.listing import Function
 import os

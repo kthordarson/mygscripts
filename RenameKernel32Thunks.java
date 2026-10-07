@@ -1,3 +1,6 @@
+// Rename generic thunks to KERNEL32.DLL imports as call_<import>
+// @author kth
+// @category mygscripts
 import ghidra.app.script.GhidraScript;
 import ghidra.program.model.listing.*;
 import ghidra.program.model.symbol.*;

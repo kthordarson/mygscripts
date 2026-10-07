@@ -1,10 +1,17 @@
-# @author kth
-# @category mygscripts
 # Python script for Ghidra to create the GlobalContext structure
 # Creates a structure with fields for resource processing and cryptographic operations
 # Applies the structure to the 'global' variable in FUN_00403bba
 # Run in Ghidra's Python interpreter
+# @author kth
+# @category mygscripts
 
+try:
+	from ghidra.ghidra_builtins import (
+		currentProgram,
+		getFunctionAt,
+	)
+except ImportError:
+	pass
 from ghidra.program.model.data import StructureDataType, UnsignedCharDataType, UnsignedIntegerDataType, PointerDataType, ArrayDataType
 from ghidra.program.model.symbol import SourceType
 from ghidra.util.task import TaskMonitor

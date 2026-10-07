@@ -1,3 +1,4 @@
+# Rename config (function/variable names/types) used by grokrenamer
 # @author kth
 # @category mygscripts
 RENAME_CONFIG = [

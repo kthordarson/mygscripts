@@ -1,4 +1,14 @@
+# Test: walk instructions from a fixed address and print references
 #armageddon
+# @author kth
+# @category mygscripts
+try:
+	from ghidra.ghidra_builtins import (
+		currentProgram,
+		toAddr,
+	)
+except ImportError:
+	pass
 from ghidra.program.model.listing import CodeUnitFormat, CodeUnitFormatOptions
 from ghidra.program.model.symbol import RefType
 codeUnitFormat = CodeUnitFormat(CodeUnitFormatOptions(CodeUnitFormatOptions.ShowBlockName.ALWAYS,CodeUnitFormatOptions.ShowNamespace.ALWAYS,"",True,True,True,True,True,True,True))

@@ -1,5 +1,14 @@
+# Rename functions from rust-objdump demangled output
 # @author kth
 # @category mygscripts
+try:
+    from ghidra.ghidra_builtins import (
+        createFunction,
+        getFunctionAt,
+        toAddr,
+    )
+except ImportError:
+    pass
 from ghidra.program.model.symbol import SourceType
 import re
 # rust-objdump.exe -d C:\temp\keystrike\keystrike-ssh-terminator --demangle > keysrtrikesshterminatordump.txt

@@ -1,3 +1,4 @@
+# Abuse: rename level functions and fix Game::load_level signature
 # @author kth
 # @category mygscripts
 # @keybinding

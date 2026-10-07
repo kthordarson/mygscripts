@@ -1,12 +1,18 @@
-# @author kth
-# @category mygscripts
-# @category CustomerSubmission.Search
 # Script requests current variable name and desired new name.
 # It then iterates through all functions, renaming the variable.
+# @author kth
+# @category mygscripts
 #
 # Note: Script does not verify that no other variable within the
 #       function is already using the new name.
 
+try:
+	from ghidra.ghidra_builtins import (
+		currentProgram,
+		monitor,
+	)
+except ImportError:
+	pass
 from ghidra.program.model.symbol import SourceType
 
 def run():

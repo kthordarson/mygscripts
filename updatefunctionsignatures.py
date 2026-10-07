@@ -1,5 +1,12 @@
+# Rename function arguments and locals based on known signatures
 # @author kth
 # @category mygscripts
+try:
+    from ghidra.ghidra_builtins import (
+        getCurrentProgram,
+    )
+except ImportError:
+    pass
 from ghidra.program.model.data import DataType, DataTypeManager
 from ghidra.program.model.data import PointerDataType
 from ghidra.program.model.listing import FunctionManager, ParameterImpl, VariableStorage
@@ -72,16 +79,16 @@ def rename_function_arguments_and_locals():
                     try:
                         local.setName(f"Out_{function_name}", SourceType.IMPORTED)
                         print(f"Renamed local var {local.getName()} -> Out_{function_name}")
-                    except:
-                        pass
+                    except Exception as ex:
+                        print("[!] rename_function_arguments_and_locals: {}".format(ex))
 
             # Handle constant pointer (e.g., (PLONG)0x0) - treat as a special case for renaming
             if "0x0" in local.getName():  # Detect pointers initialized to 0
                 try:
                     local.setName(f"NullPointer_{function_name}", SourceType.IMPORTED)
                     print(f"Renamed pointer {local.getName()} -> NullPointer_{function_name}")
-                except:
-                    pass
+                except Exception as ex:
+                    print("[!] rename_function_arguments_and_locals: {}".format(ex))
 
         updated_count += 1
 
@@ -153,8 +160,8 @@ def rename_function_arguments_and_localsv2():
 					try:
 						local.setName(f"Out_{function_name}", SourceType.IMPORTED)
 						print(f"Renamed local var {local.getName()} -> Out_{function_name}")
-					except:
-						pass
+					except Exception as ex:
+						print("[!] rename_function_arguments_and_localsv2: {}".format(ex))
 
 		updated_count += 1
 
@@ -209,8 +216,8 @@ def rename_function_returns_and_localsv1():
 									try:
 										op.setName("Result_" + function_name, SourceType.IMPORTED)
 										print(f"Renamed return value for {function_name} -> {op.toString()}")
-									except:
-										pass
+									except Exception as e:
+										print("[!] rename_function_returns_and_localsv1: {}".format(e))
 
 		# Rename local variables (example: local_1c for structure pointers)
 		for param in external_function.getParameters():
@@ -226,8 +233,8 @@ def rename_function_returns_and_localsv1():
 						try:
 							local.setName("Out_" + function_name, SourceType.IMPORTED)
 							print(f"Renamed local var {local.getName()} -> Out_{function_name}")
-						except:
-							pass
+						except Exception as ex:
+							print("[!] rename_function_returns_and_localsv1: {}".format(ex))
 
 		updated_count += 1
 

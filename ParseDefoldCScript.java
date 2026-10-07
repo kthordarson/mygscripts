@@ -1,4 +1,7 @@
+// Parse a Defold C source/header file and report problematic constructs
 // ParseDefoldCScript.java
+// @author kth
+// @category mygscripts
 import ghidra.app.script.GhidraScript;
 import java.io.*;
 import java.util.regex.*;

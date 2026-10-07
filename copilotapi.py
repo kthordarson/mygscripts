@@ -1,3 +1,4 @@
+# GitHub Copilot API auth/token helper (used by askcopilot)
 # @author kth
 # @category mygscripts
 import http.server

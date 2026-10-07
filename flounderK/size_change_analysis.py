@@ -91,7 +91,7 @@ if __name__ == "__main__":
         for addr in op_addrs:
             try:
                 createBookmark(addr, "%s: size change before usage" % func_name, "")
-            except:
-                pass
+            except Exception as e:
+                print("[!] simple_size_changing_check: {}".format(e))
             print(addr)
         print("")

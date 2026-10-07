@@ -1,7 +1,18 @@
-#@author ReverseEngineer
-#@category Functions
+# Create functions from a pointer table with validation (safe version)
+# original author: ReverseEngineer
+# @author kth
+# @category mygscripts
 #@menupath Tools.Create Functions From Pointer Table (Safe)
 
+try:
+	from ghidra.ghidra_builtins import (
+		createFunction,
+		currentProgram,
+		disassemble,
+		toAddr,
+	)
+except ImportError:
+	pass
 from ghidra.program.model.symbol import SourceType
 from ghidra.program.model.address import Address
 from ghidra.program.model.listing import Instruction

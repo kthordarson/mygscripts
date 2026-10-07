@@ -1,3 +1,4 @@
+# Rename functions from string arguments at call sites
 # @author kth
 # @category mygscripts
 try:

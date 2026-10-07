@@ -1,5 +1,14 @@
+# Rename AdjustSourcePath at 00425495 and its callers parameters
 # @author kth
 # @category mygscripts
+try:
+    from ghidra.ghidra_builtins import (
+        currentProgram,
+        getFunctionContaining,
+        getReferencesTo,
+    )
+except ImportError:
+    pass
 from ghidra.program.model.symbol import SourceType
 from ghidra.program.model.listing import Function
 from ghidra.program.model.address import AddressFactory

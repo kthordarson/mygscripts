@@ -1,5 +1,12 @@
+# Resolve Ordinal_N imports to names (kernel32/user32/wsock32)
 # @author kth
 # @category mygscripts
+try:
+	from ghidra.ghidra_builtins import (
+		getCurrentProgram,
+	)
+except ImportError:
+	pass
 from ghidra.program.model.symbol import SourceType
 from ghidra.program.model.listing import Function
 from ghidra.app.util import NamespaceUtils

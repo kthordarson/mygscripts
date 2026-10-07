@@ -1,8 +1,14 @@
-# @author kth
-# @category mygscripts
 # Ghidra script to improve Free Pascal decompilation
 # Scans for Pascal-style symbols, renames functions, and reconstructs data types
+# @author kth
+# @category mygscripts
 
+try:
+    from ghidra.ghidra_builtins import (
+        currentProgram,
+    )
+except ImportError:
+    pass
 from ghidra.program.model.symbol import SymbolType
 from ghidra.program.model.data import StructureDataType, DataTypeConflictHandler
 from ghidra.program.model.listing import FunctionManager

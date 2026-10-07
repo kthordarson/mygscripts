@@ -1,3 +1,4 @@
+# Rename wsock32 imp_ordinal_N imports to Winsock names
 # @author kth
 # @category mygscripts
 

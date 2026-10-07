@@ -1,5 +1,15 @@
+# Test: find vtables and pointers and build structures
 # @author kth
 # @category mygscripts
+try:
+    from ghidra.ghidra_builtins import (
+        currentProgram,
+        getBytes,
+        getMemoryBlocks,
+        getReferencesTo,
+    )
+except ImportError:
+    pass
 from ghidra.program.model.data import StructureDataType, CategoryPath, DataTypeConflictHandler, PointerDataType, BuiltInDataTypeManager, ArrayDataType
 from ghidra.program.model.data import StructureFactory
 import re

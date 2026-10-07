@@ -1,3 +1,4 @@
+# Test: send a decompiled function snippet to OpenAI
 # @author kth
 # @category mygscripts
 from openai import OpenAI

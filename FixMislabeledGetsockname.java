@@ -1,3 +1,6 @@
+// Rename WSOCK32 import mislabeled 'gethostbyname' to 'getsockname' and annotate
+// @author kth
+// @category mygscripts
 import ghidra.app.script.GhidraScript;
 import ghidra.program.model.symbol.*;
 import ghidra.program.model.listing.*;

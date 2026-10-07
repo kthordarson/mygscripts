@@ -1,5 +1,7 @@
 // AnalyzeOnly.java
 // Headless-only: Auto-analyze every program in the project
+// @author kth
+// @category mygscripts
 
 import ghidra.app.script.GhidraScript;
 import ghidra.app.util.headless.HeadlessScript;

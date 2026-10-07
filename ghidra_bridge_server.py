@@ -1,6 +1,7 @@
 # Run a ghidra_bridge server for external python environments to interact with
-# @author justfoxing
-# @category Bridge
+# original author: justfoxing
+# @author kth
+# @category mygscripts
 
 # NOTE: any imports here may need to be excluded in ghidra_bridge
 import logging
