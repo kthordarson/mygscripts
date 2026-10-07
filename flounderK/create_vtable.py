@@ -214,7 +214,7 @@ def createNewVtableAtAddress(
 
 
 def updateVtableAtAddress(address, vtable_size=None, program=None):
-    raise NotImplementedError
+    # raise NotImplementedError
     if program is None:
         program = currentProgram
     if vtable_size is None:
@@ -259,6 +259,7 @@ def createOrUpdateVtableAtAddress(
 def create_vtable_entrypoint():
     selection = state.getCurrentSelection()
     currLoc = state.getCurrentLocation()
+    print("Starting at selection: %s currLoc: %s" % (selection, currLoc))
     addr_set = AddressSet()
     vtable_address = None
     referring_func = None

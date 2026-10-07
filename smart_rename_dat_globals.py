@@ -184,10 +184,12 @@ def main():
 		if sym.getSymbolType() != SymbolType.LABEL:
 			continue
 		if not sym.getName().startswith("DAT_"):
+			Msg.info(None, "Skipping symbol: %s" % sym.getName())
 			continue
 
 		new_name, dtype = analyze_symbol(sym)
 		apply(sym, new_name, dtype)
+		Msg.info(None, "Renaming symbol: %s to %s count: %d" % (sym.getName(), new_name, count))
 		count += 1
 
 	Msg.info(None, "Smart-renamed %d DAT_ globals" % count)

@@ -64,9 +64,15 @@ def rename_functions_from_called_function_string_arg(func_name, arg_num):
         if not calling_func.name.startswith("FUN_"):
             continue
         pcode_ops = du.get_pcode_for_function(calling_func)
-        call_ops = [i for i in pcode_ops if i.opcode == PcodeOpAST.CALL and i.seqnum.target in call_addrs]
+        call_ops = [
+            i
+            for i in pcode_ops
+            if i.opcode == PcodeOpAST.CALL and i.seqnum.target in call_addrs
+        ]
         for call_op in call_ops:
-            back_slice = list(DecompilerUtils.getBackwardSliceToPCodeOps(call_op.getInput(arg_num)))
+            back_slice = list(
+                DecompilerUtils.getBackwardSliceToPCodeOps(call_op.getInput(arg_num))
+            )
             for op in back_slice:
                 for ref in refman.getReferencesFrom(op.seqnum.target):
                     for dat in func_to_string_mapping[calling_func]:
@@ -79,7 +85,6 @@ def rename_functions_from_called_function_string_arg(func_name, arg_num):
                             continue
                         new_name = string_value + "_" + str(calling_func.entryPoint)
                         calling_func.setName(new_name, SourceType.USER_DEFINED)
-
 
 
 if __name__ == "__main__":
